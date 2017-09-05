@@ -1,0 +1,114 @@
+---
+title: "Intro to R Markdown (demo)"
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+
+## Getting started
+
+One of the first skills that you are going to need to learn is how to import data from a file. Typically the file types that are used by beginners in R are .txt or .csv. These may become more sophisticated you progress, but for this course these will be the main types that we use.
+
+**R is extensible**; meaning that while it comes with a very comprehensive base package for data organization and stat, you may search for additional libraries to suit your needs, or develop your own. For our purposes right now we will be using two custom libraries (or packages) to get going: 
+
+1. "downloadr": allows us to download files from web locations
+2. "dplyr": allows for easy organization, naming, and piping (for later) of data.
+
+```{r install libraries}
+install.packages("downloader",repos = "https://cran.rstudio.com")
+install.packages("dplyr",repos = "https://cran.rstudio.com")
+
+# within the R code sections, hashtags create comments, sections of code that are not interpreted by the computer, but may serve to inform others (and typically yourself later in life) about what exactly in the hell is going on here. GET IN THE PRACTICE OF COMMENTING YOUR CODE. You'll thank yourself later.
+
+# load in the installed packages:
+require(downloader)
+require(dplyr)
+```
+
+
+```{r download the data file}
+url="https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/Week_3/Data/InClass_1.txt"
+filename <- basename(url)
+download(url,filename)
+```
+
+```{r load in the data}
+filename
+
+inClass1 <- read.table(file = filename,header = T,sep = "\t")
+
+class(inClass1)
+```
+```{r quick glance at your dataset}
+# get the dimensions of the data:
+nrow(inClass1) # number of rows
+ncol(inClass1) # number of columns
+
+# get the column name(s):
+names(inClass1)
+
+# see the first 6 lines
+head(inClass1)
+
+# get some summary stats:
+summary(inClass1)
+```
+
+Think of the data.frame in R as you would an Excel spreadsheet, a matrix with labelled rows and columns.
+```{r isolating rows and columns}
+
+# take a look at row 100
+inClass1[100,]
+
+# take a look a column 2
+inClass1[,2]
+
+# how might we take a look at the 253rd sample of the 1st column
+##  ????????????
+
+# isolate Behavior.X
+inClass1$Behavior.X
+```
+
+## Plotting in R
+for quick and dirty plots, you may use the base package with relative ease. For more sophisticated plots you may need to install additional packages. One of the more user-friendly plotting packages for R is "ggplot2" with is also part of the [tidyverse](https://www.tidyverse.org). We'll come back to the tidyverse a bit later. For now, let's create some quick and dirty plots to get a feel for our data distributions:
+
+```{r plotting Behaviors}
+plot(inClass1$Behavior.X)
+hist(inClass1$Behavior.X)
+
+# do this for Y
+
+```
+
+```{r assigning data to variable}
+x <- inClass1$Behavior.X
+hist(x)
+
+# you want to be clear in what you name a variable:
+reactionTimes <- inClass1$Behavior.X
+class(reactionTimes)
+```
+
+```{r renaming columns}
+# how did we get the column names before?:
+
+# given what you know about isolating columns, how might you rename "Behavior.X"?
+
+# can we do both?:
+```
+
+

@@ -1,0 +1,41 @@
+---
+title: "Revisiting old data"
+output: html_notebook
+---
+
+Getting Started:
+
+1. load in the packages "dplyr" and "downloader"
+
+2. download and load in the data file from this location: https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/Week_3/Data/inClass_2.txt
+
+3. What are the names of the columns?
+
+4. What is the mean of column 1?
+
+5. The mean() function calculates the mean value given a vection series. With this in mind how might you calculate the mean of column 1? Care to take a stab at standard deviation?
+
+6. It's often necessary to parse your data by condition. There are many ways to do this. We will be using the filter() command from dplyr. This command takes the format:
+
+> filter(.data = data.frame, filterby=="condition")
+
+So for example, say we wanted to take a look at only the Nonword trials:
+```{r}
+filter(.data = inClass2,Condition=="Nonword")
+```
+Using filter() find the mean RT value of the Word trials using summary().
+
+7. Using what you know about filter() and isolating columns, assign the filtered Nonword trials to a vecotr named "nonwordRT". Get the class of nonwordRT and try to get its mean. If you get an error compare this to you class of "reactionTimes" from the previous demo. Are they different? How?:
+
+8. filter leaves its output in its original class type. In order to use some functions like mean() and hist() we need a single numeric vector. In order to do this we may all on the unlist() function. For example to get the mean of nonwordRT, we may use:
+
+> mean(unlist(nonwordRT))
+
+Obviously this nesting is starting to get complicated. Alternatively we may use the piping capabilities of dplyr. Piping simply passes the output to the next function in a simpler, left to right sentence like structure. Rewriting what we have above:
+
+> nonwordRT %>% unlist() %>% mean()
+
+
+8. Using what you've learned, plot seperate histograms for RT on "Word" and "NonWord" trials
+
+

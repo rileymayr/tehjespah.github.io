@@ -1,0 +1,219 @@
+---
+title: "Lecture 3"
+output: slidy_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(out.width="400px", dpi=120)
+```
+
+## Normal Distribution (1/N)
+The **normal** (or **Gaussian**) **distribution** is a continuous probability distribution that has a bell-shaped probability density function, known as the **Gaussian function** or informally as the **bell curve**:
+
+- The parameter **_μ_** is the _mean_ (location of the peak) and **_σ_^2^** is the variance (**_σ_** is the standard deviation). 
+- A normal distribution is often used as a first approximation to describe real-valued “random” error or “random” deviations that clusters around a single mean value.
+
+
+## Normal Distribution (2/N)
+- Most DVs in Psychological research are assumed to be normally distributed.
+- Most of the statistical procedures employed in Psychological research assume that observed/recorded data are normally distributed.
+
+## Normal Distribution (3/N)
+```{r echo=TRUE, fig.align = "center", out.width = '80%'}
+x <- rnorm(n = 1000,mean = 85,sd = 8)
+hist(x)
+```
+
+## Normal Distribution (3/N)
+```{r echo=TRUE, fig.align = "center", out.width = '80%'}
+x <- rnorm(n = 10,mean = 85,sd = 8)
+hist(x)
+```
+
+## Normal Distribution (3/N)
+```{r echo=TRUE, fig.align = "center", out.width = '80%'}
+x <- rnorm(n = 100,mean = 85,sd = 8)
+hist(x)
+```
+
+## Normal Distribution (3/N)
+```{r echo=TRUE, fig.align = "center", out.width = '80%'}
+x <- rnorm(n = 1000,mean = 85,sd = 8)
+hist(x)
+```
+
+## Normal Distribution (3/N)
+```{r echo=TRUE, fig.align = "center", out.width = '80%'}
+x <- rnorm(n = 10000,mean = 85,sd = 8)
+hist(x)
+```
+
+## Normal Distribution (3/N)
+```{r echo=TRUE, fig.align = "center", out.width = '80%'}
+x <- rnorm(n = 10000,mean = 85,sd = 8)
+hist(x,breaks = 100)
+```
+
+## Normal Distribution (4/N)
+_**What’s so great about normal distributions? **_
+
+- Most scores in a normal distribution cluster around its mean or center.
+- The normal curve is perfectly symmetrical.
+- All the measures of central tendency agree for a normal distribution.
+- Almost all the scores (99.74%) fall within +/- 3 standard deviations of the mean.
+![](https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/Week_3/Images/TND_percentages.png){width=65%}
+
+## Standardizing Data: Z-scores (1/N)
+**Standardized using Z-scores:**
+
+- Z scores put raw scores in context.
+- Z scores are in standard deviation units
+- They tell you where a particular score fell, in the context of all the other scores.
+- If a Z score is 0, the score equals the mean of the distribution.
+- If a Z score is 1, the score fell one standard deviation above the distribution’s mean.
+
+
+## Standard Normal Distribution (1/N)
+The distribution with _μ_ = 0 and _σ^2^_ = 1 is called the **standard normal distribution** or the **unit normal distribution**.
+
+![](https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/Week_3/Images/TND_percentages.png){width=65%}
+
+## Standard Normal Distribution (2/N)
+**Computing Z-scores**
+To go from a raw score to a Z score: 
+- _Z_ = $\frac{X - μ}{σ}$
+
+To go from a Z score to a raw score
+- _X_ =  μ + (_Z_ $\times$ σ)
+
+![](https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/Week_3/Images/TND_percentages.png){width=65%}
+
+## Standard Normal Distribution (3/N)
+A fixed percentage of scores fall within specific regions of a standardized normal curve.
+
+Know the **68 -> 95 -> 99.7 Rule:**
+
+- **68%** of the observations fall within 1 standard deviation of the mean.
+- **95%** of the observations fall within 2 standard deviations of the mean.
+- **99.7%** of the observations fall within 3 standard deviations of the mean.
+![](https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/Week_3/Images/TND_percentages.png){width=65%}
+
+## Z-Score Table
+
+![](https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/Week_3/Images/zscore_table.png){width=75%}
+
+## Z-Scores & Percentiles (1/N)
+You can use the Z-score table to tranform Z-scores into percentile rankings:
+- if positive Z: look up probability
+- if negative Z: look up probability and subtract it from 1
+
+![](https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/Week_3/Images/zscore_table.png){width=50%}
+
+## Z-Scores & Percentiles (2/N)
+To find the percent of cases **above** a certain Z score:
+- if positive Z: look up probability and subtract it from 1
+- if negative Z: look up probability
+
+![](https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/Week_3/Images/zscore_table.png){width=50%}
+
+## Z-Scores & Percentiles (2/N)
+To find the percent of cases **between** two Z scores, find area of larger z score and subtract area for smaller z score. 
+
+
+![](https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/Week_3/Images/zscore_table.png){width=50%}
+
+## Z-Scores & Percentiles (3/N)
+In R, we can use the function pnorm():
+```{r echo=TRUE}
+pnorm(.47)
+
+1-pnorm(.47)
+
+pnorm(.84)-pnorm(.47)
+```
+
+![](https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/Week_3/Images/zscore_table.png){width=50%}
+
+
+## Variability Due to Chance and Sampling Error
+**Variability due to chance** refers to the fact that statistics (e.g., means, SDs) obtained form samples naturally vary from one sample to the next due to the particular observations that are included in the sample.
+
+The term **sampling error** is used to refer to variability due to chance, in that, the numerical value of a sample statistic will probably deviate (be in error) from the parameter it is estimating.
+
+## Sampling Distributions (1/N)
+
+Because the statistics of samples obtained from the same distribution can deviate from each other due to chance how can we tell if difference in a statistic  (i.e., mean) between samples are due to chance or something else? 
+
+![](https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/Week_3/Images/sampst2.gif){width=50%}
+
+We compared observed difference to a distribution of the differences between samples – a sampling distribution – to see if the variability would be expected. 
+
+## Sampling Distributions (2/N)
+
+**Sampling Distribution of Differences Between Means:** A sampling distribution that tell us what values we might (or might not) expect to obtain if the means of the populations from which the samples came from were equal.
+
+**Example:** Suppose we have two populations with the same mean, **μ**, and SD, **σ** . A sampling distribution of differences between the means could be obtained by:
+
+- Draw a pair of random samples of the same size N
+- calculate the difference between the sample means
+- repeat for a large (infinite) number of sample pairs
+- plot the distribution of differences in means
+
+## Hypothesis Testing (1/N)
+
+Hypothesis testing refers to the process of choosing between competing hypotheses based on observed data and whether observed differences are likely to have occurred due to sampling error.
+
+A statistical hypothesis test is a method of making decisions using data, whether from a controlled experiment or an observational study (not controlled), about a research and null hypothesis:
+
+## Hypothesis Testing (2/N)
+
+**Research Hypothesis** is the hypothesis we want to test (i.e., samples drawn from populations with different means). For example:
+
+- Taller people on average earn more money than shorter people
+- People are faster to respond to real words compared to non-words.
+- Self-esteem of children from divorced parents is lower than for children of non-divorced parents.
+
+## Hypothesis Testing (3/N)
+
+**Null Hypothesis** is the hypothesis that there is no difference. (i.e., samples drawn from populations with the same means). For example:
+
+- Taller people on average earn the same as shorter people
+- People respond  as fast/slow to real words and non-words.
+- Self-esteem of children from divorced parents is equivalent to the self-esteem  of children of non-divorced parents.
+
+## Hypothesis Testing (4/N)
+The logic of statistical hypothesis testing:
+
+1. Begin with a research hypothesis
+2. Setup the null hypothesis: **H~0~**
+3. Construct a sample distribution of a particular statistic on the assumption that **H~0~**  is true.  
+4. Collect some data
+5. Reject or retain **H~0~**, depending on the probability, under **H~0~**, of a sample statistic as extreme as the one obtained – usually less than 5% chance that the sample statistic would be observed (i.e., p ≤ .05).
+
+## Hypothesis Testing (5/N)
+
+**NOTE: We are not:**
+
+- testing whether the research hypothesis is true given the data. 
+- testing whether the null hypothesis is true given the data
+
+**Rather…**
+- we are testing whether we expect to obtain the particular data if the null hypothesis is true.
+- in other words, we reject (not disprove) the null hypothesis if the probability of the obtained statistic (i.e., mean difference score) is so small that it is unlikely to be due to chance alone (i.e., sampling error).
+- … and thus, is potentially due to something else… hopefully what we defined in our research hypothesis.
+
+## Hypothesis Testing (6/N)
+slide using what we know in R
+
+## Type I and Type II Errors
+
+**Type I Error (alpha, α):** Incorrectly rejecting the null hypothesis, H0, when it is true. Minimized by setting a conservative cutoff (i.e., p ≤ .05 or 5% probability).
+
+**Type II Error (beta, β):** Failing to reject the null hypothesis, H0, when it is false.
+
+![types of error](https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/Week_3/Images/type_errors.jpg){width=80%}
+
+
+
+
