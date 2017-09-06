@@ -1,0 +1,53 @@
+---
+title: "Revisiting old data"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Homework 3.1:
+
+
+For this homework we will be revisiting some of the data from last week (the Lexical Decision dataset). Recall that a lexical decision task is an experimental procedure/method used in many psychology and psycholinguistics experiments. The basic procedure employed involved measuring how quickly people classified stimuli presented to participants visually (i.e., on a computer monitor) as either words or non-words.
+		
+		**e.g., dog = word;  qog = non-word**
+
+Participants typically respond using a keyboard that measures RT in milliseconds (ms).
+
+
+
+##Part 1: Assessing the grand distribution 
+
+1. load in the packages `dplyr` and `downloader`
+
+2. download and load in the data file from this location, assigning it the variable name `LexData`: https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/Week_3/Data/LexicalDescisionData.txt
+
+3. What are the names of the columns?
+
+4. Use the `summary()` function to get info about `LexData`. How many samples are from each condition?
+
+5. The `mean()` function calculates the mean value given a vector series and the `sd()` function calulates its standard deviation. They take the form `mean(x)` and `sd(x)` where x is a vector (single column) of data. Using these functions determine the overall mean and standard deviation of the entire distribution of reaction times in `LexData` (remember that you'll need to isolate reaction times from the rest of the data frame). 
+
+6. Create the following plots of reaction times from the entire distribution: histrogram and Q-Q plot (including line). Is the distribution normal?
+
+
+## Part 2: Assessing by condition
+While the overall (grand) mean may be informative, we are more likely to be interested in comparing means per condition. Indeed, it's often necessary to parse your data by condition. There are many ways to do this. For right now, we will be using the `filter()` command from `dplyr`. This command takes the format:
+```{r eval=FALSE}
+filter(.data = data.frame, filterby=="condition")
+```
+where `.data` refers to the data frame you want to filter from; and `filterby==Condition` is a logical test that is used to filter. The resulting filter selects items from the data from where the condition statement is `TRUE` (see the *Preliminaries* section above).
+
+So for example, say we wanted to take a look at only the Nonword trials:
+```{r eval=FALSE}
+filter(.data = LexData, Condition=="Nonword")
+```
+7. Using `filter()` to parse the data, find the first quartile of RT value of the Word trials. What is the median? What is the longest RT?
+
+8. Use what you have learned so far to calculate the mean and standard deviations seperately for Word and Nonword trials. One of the assumtions of parametric tests such as ANOVA is the homogeniety of variance (i.e. the variences are equal across experimental conditions). There are tests for this, but for now do you feel that these two variences are roughly equal.
+
+9. Create seperate histrograms and Q-Q plots for Word and NonWord trials. Comment on whether the distribution of reaction times in each condition is normal.
+
+
+
+
