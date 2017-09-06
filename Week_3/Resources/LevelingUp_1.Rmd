@@ -1,0 +1,219 @@
+---
+title: "Leveling-Up 1: Conditional logic, Quickloading, Transforming data, and Building your own functions"
+output:
+  html_document:
+    df_print: paged
+    
+---
+
+
+# Leveling-up (XP +100)
+
+## Conditional Logic
+
+This is a quick example for using logical statements in R. The main purpose of logical staements is to identify whether a condition is `TRUE` or `FALSE`. For example, lets test whether number 2+2 is equal to 5.
+
+```{r}
+2+2==0
+```
+The `==` here may be read as *is equal to*. R is telling us that the statement *2 plus 2 is equal to 5* is FALSE (take that Big Brother!). To go a bit further:
+
+1. build a sequence of numbers from 0 to 36 counting by 3's:
+```{r}
+numSeq <- seq(from = -36,to = 36,by = 3); show(numSeq)
+```
+Note that the semicolon allows us to place two commands on a single like. The first assigns our number sequence to a named variable. The second tell R to show it in the console.
+
+2. let's say we want to know whether or not individual values in numSeq are negative (i.e., less than zero). We can create a logical statement to test this.
+
+```{r}
+numSeq<0
+```
+what does the above command yield in the Console? (that is what is your interpretation of the output?)
+
+3. Rather than a logical test (T or F) let's say we want to **identify** which numbers in our sequence are greater than zero:
+
+```{r}
+which(numSeq>0)
+```
+what is information being displayed here (hint: remember our in class demo on indexing rows and columns)?
+
+4. OK, last bit of logic here. Let's find whether each individual number is equal to 0.
+```{r}
+numSeq==0
+
+# or 
+!numSeq==0
+```
+
+What info is the first command relaying? the second?
+
+
+## Quick-loading packages
+
+We don't need to write out the commands for install packages and loading everytime. A bit of R ninja-ing:
+
+```{r}
+if (!require("pacman")) install.packages("pacman")
+
+pacman::p_load(
+  downloader,
+  dplyr)
+
+```
+
+The above takes advantage of logical statments in R (see Homeowork 2.1). The chunk above does the following:
+
+1. Attempt to load the package "pacman" i.e this is require()
+
+2. *if* R cannot load pacman (i.e. it hasn't been installed) then install.packages. The operator "!" before an item means *NOT*. So *!require* means that "pacman" cannot be loaded. If, however, pacman **can** be loaded then do nothing.
+
+3. pacman::p_load() does a similar call for each of the listed packages
+
+As your required packages grows you can just add to the list. This is typically the first thing I do in every notebook. *This is especially useful when sharing your code.* Your colleague may not have the the packages that you are using installed on their computer. When they run this command it checks and installs the necessary packages.
+
+
+# Transforming data
+
+To begin, let's create a random distribution, beatsData, of 1000 samples with the following characteristics:
+```{r}
+beatsData <- rnorm(n = 1000,mean = 150,sd = 14)
+```
+now, get the summary stats:
+```{r}
+summary(beatsData)
+```
+
+let's boxplot beatsData:
+```{r}
+boxplot(beatsData)
+```
+
+now let's multiply every value by 1.25. Summarize and boxplot the transformed distribulution:
+```{r}
+beatsDataMult <- beatsData*1.25
+summary(beatsDataMult)
+boxplot(beatsDataMult)
+```
+
+we can even boxplot both the original beatsData and beatsDataMult side by side:
+```{r}
+boxplot(beatsData,beatsDataMult)
+```
+
+finally, let's get the log base 10 of beatsData, summarize, and boxplot:
+```{r}
+summary(log10(beatsData))
+boxplot(log10(beatsData))
+```
+
+While this is a perfectly fine way to do this, you may become concerned about the nesting of parentheses. For example while the statement `summary(log10(beatsData))` is perfectly fine, if may become confusing to write or interpret the code it you have too much nesting. For example, lets say that I want to get the `summary` of natural logs (base 10) of the absolute values of the cosines of the original `beatsData` values (note that I need absolute values because the cosines could be negative numbers and you cannot calculate the logarithm of a negative number!! One way to do this would be:
+```{r}
+summary(log10(abs(cos(beatsData))))
+```
+Indeed I've seen instances where people have nested 8 or 9 functions in a single line, which can get quite confusing. Typically you want to avoid  functions embedded in functions embedded in functions. One method of doing so involves taking advantage of the piping capabilities in `dplyr`. Provided the output of a function is a numberical vector, piping simply passes the output to the next function in a simpler, left to right sentence like structure. Before we do the code, let's think of the mathematical (or logical) sequence of operations. Typically this means starting fron the inner most function and working our way out, so...
+
+1. get the cosines of `beatsData` values
+2. get the absolute values of result from (1)
+3. get the log base 10 values of (2)
+4. get the summay of (3)
+
+You could do this in log form, assigning each output to a new variable:
+
+```{r}
+one <- cos(beatsData)
+two <- abs(one)
+three <- log10(two)
+
+summary(three)
+```
+
+Or you can **PIPE IT!!!**:
+
+```{r}
+cos(beatsData) %>% abs() %>% log10() %>% summary()
+```
+where the operator `%>%` means *pass output to the text function*. As your problems become more sophisticated, you'll want to find tools that make coding simpler. Indeed `dplyr` is full of them. To get links to detailed info on `dyplr` (or any other library or function) you can simply type `? dplyr`. For example type in `? log` to see another way we could have done log base 10.
+
+One of the main points that I want you to take from this section is that **you only need to enter the vector name in order to get access to the entire vector**. For example if `x = {2,3,5,7,9}` and you want to multiply every value in `x` by 2:
+
+```{r}
+x = c(2,3,5,7,9)
+y <- x*2
+show(x) # if running from Console you don't need to include show.
+show(y) # but if knitting the source you may need it to display in knitted doc
+y/x
+```
+
+## Building your own functions in R
+
+Functions in R take the format:
+
+```{r eval=FALSE}
+  myfunction <- function(input parameters){
+  
+  do something to the input parameters
+  
+  return(output)
+  }
+```
+
+**NOTE:** if you are running the raw chuck of the above example in RStudio you've probably noticed that you get an error message. This is because the phrase `do something to the input parameters` is not correct syntax for R. You may also note that in the chunk header I have typed `{r eval=FALSE}`. The `eval=FALSE` tells RStudio to print, but not to execute the code when knitting. If I were to leave this statement out you would get an error when knitting. This way you can see the code in the resulting `html` document without this error.
+
+
+
+Let's create our own function for a mean. But first let's create a random distribution named `dataX`:
+
+```{r}
+set.seed(1) 
+dataX <- rnorm(n = 100,sd = 7.5,mean = 65)
+```
+`set.seed()` ensures that you are generating the same random numbers that I am... which shows that the random number generator isn't so random after all! Lets set our seed to 1, and generate a "random sample" with the following characteristics
+
+NOTE: if you use `set.seed()` you'll need to use it each time BEFORE using `rnorm()`, otherwise every subsequent distribution will be different. 
+
+For example compare:
+```{r eval=FALSE}
+set.seed(1) 
+dataX <- rnorm(n = 100,sd = 7.5,mean = 65)
+dataY <- rnorm(n = 100,sd = 7.5,mean = 65)
+
+# test to see if x and y are identical:
+identical(dataX,dataY)
+```
+Above the `identical()` command yielded FALSE, meaning `dataX` and `dataY` weren't equal. Feel free to compare them visually if you like. Now try:
+```{r eval=FALSE}
+set.seed(1) 
+dataX <- rnorm(n = 100,sd = 7.5,mean = 65)
+
+set.seed(1) 
+dataY <- rnorm(n = 100,sd = 7.5,mean = 65)
+
+# test to see if x and y are identical:
+identical(dataX,dataY)
+```
+OK... on to the function!
+Using what we know, let's create a "hand written" function to get the mean (yes I know R already comes with one!). We know that the mean is equal to the sum of a set of numbers divided-by the number of observations. Another was of saying that is the mean is equal to the sum of the set dividerd by the `length` of the set, so:
+
+```{r}
+the_mean <- function(input){  # create a function "the_mean" that takes 1 input parameter (our sequence of numbers)
+  value <- sum(input)/length(input)  # this is just the equation for the mean
+  return(value) # return that value
+}
+```
+You need to run this function in the Console before it becomes active (if in the Rmd file, you can run this chunk or highlight the entire function and choose the `Run Selected Lines` option).
+
+
+\
+\
+\
+\
+\______________________________________
+\
+\
+\
+\
+\
+\
+\
+\
