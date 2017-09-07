@@ -1,0 +1,47 @@
+---
+title: "Homework 3.2"
+output: html_notebook
+---
+
+
+## Part 1
+
+First, using set.seed(1), create a random distribution named `rawData` of 500 values with a mean of 65 and a standard deviation of 8 (remember to assign it some variable name).
+
+1. Using calculate the mean of `rawData` you may use either your own funtion (see Week 3: Leveling-Up) or the built-in function from R. Is this value identical to the mean value that you initially requested for your random distribution? How about the standard deviation of `rawData`?
+
+2. Create a histogram with 25 bins as well as a Q-Q plot (including the Q-Q line) for your `rawData` to confirm that the data is indeed normally distributed.
+
+# Part 2
+
+Download and load in the data file from this location, assigning it the variable name `LexData`: https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/Week_3/Data/LexicalDescisionData.txt 
+
+*note: if you have not cleared out your project cache, LexData may still be installed from a previous session*
+
+3. Create a custom function to calculate z-scores of reaction times for `LexData` (remember that you'll need to isolate ReactionTime from the dataframe). Assign this to a variable named `Zscores`. Visually compare the values contained in `Zscores` with those obtained if you run the command `scale(LexData)`. What do the values under `attr(,"scaled:center")` and `attr(,"scaled:scale")` at the end of this command represent?
+
+4. Create a frequency distribution (histogram) of `Zscores` in R.
+
+5. Caluclate the resulting probabilities of your obtained scores using the `pnorm()` function. What information is being conveyed here?
+
+6. Repeat (5), this time calculating Zscores seperately for Word and Nonword conditions.
+
+
+BONUS: 
+
+Combine the dataframe `LexData` and your z-scores into a single dataframe named `dataStd`. Your resulting dataframe should have 3 columns, the first two from `LexData` (ReactionTime and Condition), the third the corresponding `Zscores`. 
+
+7. Which raw score (ReactionTime) corresponds to a Zscore of `-0.976287577` ?
+- calculate this "by hand" (using the conversion formula).
+- determine this using what you have learned in this week's "Leveling-Up"
+
+
+\
+\
+\
+\
+---------------------------
+\
+\
+\
+\
