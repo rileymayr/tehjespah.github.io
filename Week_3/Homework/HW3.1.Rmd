@@ -42,6 +42,7 @@ So for example, say we wanted to take a look at only the Nonword trials:
 ```{r eval=FALSE}
 filter(.data = LexData, Condition=="Nonword")
 ```
+
 7. Using `filter()` to parse the data, find the first quartile of RT value of the Word trials. What is the median? What is the longest RT?
 
 8. Use what you have learned so far to calculate the mean and standard deviations seperately for Word and Nonword trials. One of the assumtions of parametric tests such as ANOVA is the homogeniety of variance (i.e. the variences are equal across experimental conditions). There are tests for this, but for now do you feel that these two variences are roughly equal.
