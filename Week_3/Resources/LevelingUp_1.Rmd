@@ -158,7 +158,7 @@ Functions in R take the format:
   }
 ```
 
-**NOTE:** if you are running the raw chuck of the above example in RStudio you've probably noticed that you get an error message. This is because the phrase `do something to the input parameters` is not correct syntax for R. You may also note that in the chunk header I have typed `{r eval=FALSE}`. The `eval=FALSE` tells RStudio to print, but not to execute the code when knitting. If I were to leave this statement out you would get an error when knitting. This way you can see the code in the resulting `html` document without this error.
+**NOTE:** if you are running the raw chunk of the above example in RStudio you've probably noticed that you get an error message. This is because the phrase `do something to the input parameters` is not correct syntax for R. You may also note that in the chunk header I have typed `{r eval=FALSE}`. The `eval=FALSE` tells RStudio to print, but not to execute the code when knitting. If I were to leave this statement out you would get an error when knitting. This way you can see the code in the resulting `html` document without this error.
 
 
 
