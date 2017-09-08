@@ -36,7 +36,7 @@ While the overall (grand) mean may be informative, we are more likely to be inte
 ```{r eval=FALSE}
 filter(.data = data.frame, filterby=="condition")
 ```
-where `.data` refers to the data frame you want to filter from; and `filterby==Condition` is a logical test that is used to filter. The resulting filter selects items from the data from where the condition statement is `TRUE` (see the *Preliminaries* section above).
+where `.data` refers to the data frame you want to filter from; and `filterby==Condition` is a logical test that is used to filter. The resulting filter selects items from the data from where the condition statement is `TRUE` ** see [Leveling-up](https://github.com/tehjespah/tehjespah.github.io/blob/master/Week_3/Resources/LevelingUp_1.Rmd) resource for this week ).
 
 So for example, say we wanted to take a look at only the Nonword trials:
 ```{r eval=FALSE}

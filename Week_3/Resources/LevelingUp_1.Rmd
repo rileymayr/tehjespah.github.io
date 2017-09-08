@@ -18,7 +18,7 @@ This is a quick example for using logical statements in R. The main purpose of l
 ```
 The `==` here may be read as *is equal to*. R is telling us that the statement *2 plus 2 is equal to 5* is FALSE (take that Big Brother!). To go a bit further:
 
-1. build a sequence of numbers from 0 to 36 counting by 3's:
+1. build a sequence of numbers from -3 to 36 counting by 3's:
 ```{r}
 numSeq <- seq(from = -36,to = 36,by = 3); show(numSeq)
 ```
