@@ -16,7 +16,7 @@ Participants typically respond using a keyboard that measures RT in milliseconds
 
 
 
-##Part 1: Assessing the grand distribution
+## Part 1: Assessing the grand distribution
 
 1. load in the packages `dplyr` and `downloader`
 
