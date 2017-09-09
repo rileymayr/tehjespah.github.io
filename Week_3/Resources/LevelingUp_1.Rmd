@@ -11,10 +11,10 @@ output:
 
 ## Conditional Logic
 
-This is a quick example for using logical statements in R. The main purpose of logical statements is to identify whether a condition is `TRUE` or `FALSE`. For example, lets test whether number 2+2 is equal to 5.
+This is a quick example for using logical statements in R. The main purpose of logical statements is to identify whether a condition is `TRUE` or `FALSE`. For example, let's test whether 2+2 is equal to 5.
 
 ```{r}
-2+2==0
+2+2==5
 ```
 The `==` here may be read as *is equal to*. R is telling us that the statement *2 plus 2 is equal to 5* is FALSE (take that Big Brother!). To go a bit further:
 
@@ -22,21 +22,21 @@ The `==` here may be read as *is equal to*. R is telling us that the statement *
 ```{r}
 numSeq <- seq(from = -36,to = 36,by = 3); show(numSeq)
 ```
-Note that the semicolon allows us to place two commands on a single like. The first assigns our number sequence to a named variable. The second tell R to show it in the console.
+Note that the semicolon allows us to place two commands on a single like. The first assigns our number sequence to a variable (or object) named `numSeq`. The second tells R to show the output in the console.
 
-2. let's say we want to know whether or not individual values in numSeq are negative (i.e., less than zero). We can create a logical statement to test this.
+2. let's say we want to know whether or not individual values in `numSeq` are negative (i.e., less than zero). We can create a logical statement to test this.
 
 ```{r}
 numSeq<0
 ```
-what does the above command yield in the Console? (that is what is your interpretation of the output?)
+what does the above command yield in the Console? (that is, what is your interpretation of the output?)
 
 3. Rather than a logical test (T or F) let's say we want to **identify** which numbers in our sequence are greater than zero:
 
 ```{r}
 which(numSeq>0)
 ```
-what is information being displayed here (hint: remember our in class demo on indexing rows and columns)?
+what is information being displayed here (hint: remember our [in-class demo](https://github.com/tehjespah/tehjespah.github.io/blob/master/Week_3/Resources/openingDemo.Rmd) on indexing rows and columns)?
 
 4. OK, last bit of logic here. Let's find whether each individual number is equal to 0.
 ```{r}
@@ -62,13 +62,13 @@ pacman::p_load(
 
 ```
 
-The above takes advantage of logical statments in R (see Homeowork 2.1). The chunk above does the following:
+The above takes advantage of logical statments in R. The chunk above does the following:
 
-1. Attempt to load the package "pacman" i.e this is require()
+1. Attempt to load the package "pacman" i.e this is `require()`
 
-2. *if* R cannot load pacman (i.e. it hasn't been installed) then install.packages. The operator "!" before an item means *NOT*. So *!require* means that "pacman" cannot be loaded. If, however, pacman **can** be loaded then do nothing.
+2. *if* R cannot load `pacman` (i.e. it hasn't been installed) then `install.packages()`. The operator "!" before an item means *NOT*. So `!require` means that `pacman` cannot be loaded. If, however, pacman **can** be loaded then do nothing.
 
-3. pacman::p_load() does a similar call for each of the listed packages
+3. `pacman::p_load()` does a similar call for each of the listed packages
 
 As your required packages grows you can just add to the list. This is typically the first thing I do in every notebook. *This is especially useful when sharing your code.* Your colleague may not have the the packages that you are using installed on their computer. When they run this command it checks and installs the necessary packages.
 
@@ -108,10 +108,12 @@ boxplot(log10(beatsData))
 ```
 
 While this is a perfectly fine way to do this, you may become concerned about the nesting of parentheses. For example while the statement `summary(log10(beatsData))` is perfectly fine, if may become confusing to write or interpret the code it you have too much nesting. For example, lets say that I want to get the `summary` of natural logs (base 10) of the absolute values of the cosines of the original `beatsData` values (note that I need absolute values because the cosines could be negative numbers and you cannot calculate the logarithm of a negative number!! One way to do this would be:
+
 ```{r}
 summary(log10(abs(cos(beatsData))))
 ```
-Indeed I've seen instances where people have nested 8 or 9 functions in a single line, which can get quite confusing. Typically you want to avoid  functions embedded in functions embedded in functions. One method of doing so involves taking advantage of the piping capabilities in `dplyr`. Provided the output of a function is a numerical vector, piping simply passes the output to the next function in a simpler, left to right sentence like structure. Before we do the code, let's think of the mathematical (or logical) sequence of operations. Typically this means starting from the inner most function and working our way out, so...
+
+Indeed I've seen instances where people have nested 8 or 9 functions in a single line, which can get quite confusing. Typically you want to avoid functions embedded in functions embedded in functions. One method of doing so involves taking advantage of the piping capabilities in `dplyr`. Provided the output of a function is a numerical vector, piping simply passes the output to the next function in a simpler, left to right, sentence like structure. Before we do the code, let's think of the mathematical (or logical) sequence of operations. Typically this means starting from the inner most function and working our way out, so the staps are:
 
 1. get the cosines of `beatsData` values
 2. get the absolute values of result from (1)
@@ -142,7 +144,7 @@ x = c(2,3,5,7,9)
 y <- x*2
 show(x) # if running from Console you don't need to include show.
 show(y) # but if knitting the source you may need it to display in knitted doc
-y/x
+y/x # all x's divided by y's give us 2!
 ```
 
 ## Building your own functions in R
@@ -158,7 +160,7 @@ Functions in R take the format:
   }
 ```
 
-**NOTE:** if you are running the raw chunk of the above example in RStudio you've probably noticed that you get an error message. This is because the phrase `do something to the input parameters` is not correct syntax for R. You may also note that in the chunk header I have typed `{r eval=FALSE}`. The `eval=FALSE` tells RStudio to print, but not to execute the code when knitting. If I were to leave this statement out you would get an error when knitting. This way you can see the code in the resulting `html` document without this error.
+**NOTE:** if you are running the raw chunk of the above example in RStudio you've probably noticed that you get an error message. This is because the phrase `do something to the input parameters` is not correct syntax for R. You may also note that in the chunk header I have typed `{r eval=FALSE}`. The `eval=FALSE` tells RStudio to print, but not to execute the code when knitting. If I were to leave this statement out you would get an error when knitting. This way you can see the code in the resulting `html` document without this error. When you're looking in RStudio at **my** examples, in many cases you will see `{r eval=FALSE}`. For now **you need to evaluate all of your R chunks, so you can simply write your headers as `{r eval=TRUE}` or just simply `{r}` (in this case RStudio does `eval=TRUE` by default).
 
 
 
@@ -173,7 +175,7 @@ dataX <- rnorm(n = 100,sd = 7.5,mean = 65)
 NOTE: if you use `set.seed()` you'll need to use it each time BEFORE using `rnorm()`, otherwise every subsequent distribution will be different.
 
 For example compare:
-```{r eval=FALSE}
+```{r eval=TRUE}
 set.seed(1)
 dataX <- rnorm(n = 100,sd = 7.5,mean = 65)
 dataY <- rnorm(n = 100,sd = 7.5,mean = 65)
@@ -182,7 +184,7 @@ dataY <- rnorm(n = 100,sd = 7.5,mean = 65)
 identical(dataX,dataY)
 ```
 Above the `identical()` command yielded FALSE, meaning `dataX` and `dataY` weren't equal. Feel free to compare them visually if you like. Now try:
-```{r eval=FALSE}
+```{r eval=TRUE}
 set.seed(1)
 dataX <- rnorm(n = 100,sd = 7.5,mean = 65)
 
@@ -192,8 +194,9 @@ dataY <- rnorm(n = 100,sd = 7.5,mean = 65)
 # test to see if x and y are identical:
 identical(dataX,dataY)
 ```
-OK... on to the function!
-Using what we know, let's create a "hand written" function to get the mean (yes I know R already comes with one!). We know that the mean is equal to the sum of a set of numbers divided-by the number of observations. Another was of saying that is the mean is equal to the sum of the set dividerd by the `length` of the set, so:
+
+### OK... on to the function!
+Using what we know, let's create a "hand written" function to get the mean (yes I know R already comes with one!). We know that the mean is equal to the sum of a set of numbers divided-by the number of observations. Another way of saying that is the mean is equal to the sum of the set dividerd by the `length` of the set, so:
 
 ```{r}
 the_mean <- function(input){  # create a function "the_mean" that takes 1 input parameter (our sequence of numbers)
@@ -201,7 +204,7 @@ the_mean <- function(input){  # create a function "the_mean" that takes 1 input 
   return(value) # return that value
 }
 ```
-You need to run this function in the Console before it becomes active (if in the Rmd file, you can run this chunk or highlight the entire function and choose the `Run Selected Lines` option).
+You need to run this function in the Console before it becomes active (if in the Rmd file, you can run this chunk or highlight the entire function and choose the `Run Selected Lines` option). Test your function by using it to find the mean of dataX. Compare this value to what you get using `mean()`.
 
 
 \

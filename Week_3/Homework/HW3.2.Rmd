@@ -8,7 +8,7 @@ output: html_notebook
 
 First, using set.seed(1), create a random distribution named `rawData` of 500 values with a mean of 65 and a standard deviation of 8 (remember to assign it some variable name).
 
-1. Using calculate the mean of `rawData` you may use either your own function (see Week 3: Leveling-Up) or the built-in function from R. Is this value identical to the mean value that you initially requested for your random distribution? How about the standard deviation of `rawData`?
+1. Calculate the mean of `rawData`. You may use either your own function [Week 3: Leveling-Up](https://github.com/tehjespah/tehjespah.github.io/blob/master/Week_3/Resources/LevelingUp_1.Rmd) or the built-in function from R. Is this value identical to the mean value that you initially requested for your random distribution? How about the standard deviation of `rawData`?
 
 2. Create a histogram with 25 bins as well as a Q-Q plot (including the Q-Q line) for your `rawData` to confirm that the data is indeed normally distributed.
 
