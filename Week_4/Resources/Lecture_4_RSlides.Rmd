@@ -248,9 +248,10 @@ pacman::p_load(
   downloader,
   dplyr)
 
+# look ma... no downloading!!!
+mensIncome <- read.table(file="https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/Week_4/Data/mensIncome.txt", header = T) 
 
-mensIncome <- read.table(file="mensIncome.txt", header = T) 
-
+#although downloading is still good practice.
 
 ```
 
