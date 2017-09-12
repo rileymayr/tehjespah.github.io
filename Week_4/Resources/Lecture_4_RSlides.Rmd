@@ -269,11 +269,15 @@ mensIncome <- read.table(file="https://raw.githubusercontent.com/tehjespah/tehje
 ## Permutations & Combinations
 
 Given what we know we can construct functions for each of these?
+
+Permutation example:
 ```{r echo=TRUE}
 permutations <- function(N,r){
   factorial(N)/factorial(N-r)
 }
 ```
+Combinations?:
+
 
 ## Binomial distribution:
 
@@ -286,6 +290,7 @@ where `dbinom` has three arguments: the number of correct responses, the size of
 *Q:* In the case of flipping a coin, given 20 flips what is the probability of exactly 14 heads (assuming heads=correct)?
 
 ## Creating a binomial probability table:
+
 ```{r echo=TRUE}
 probability <- 0.5
 numToss <- 20
