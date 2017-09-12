@@ -1,0 +1,341 @@
+---
+title: "Week 4"
+output: slidy_presentation
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## Variability Due to Chance and Sampling Error
+**Variability due to chance** refers to the fact that statistics (e.g., means, SDs) obtained form samples naturally vary from one sample to the next due to the particular observations that are included in the sample.
+
+The term **sampling error** is used to refer to variability due to chance, in that, the numerical value of a sample statistic will probably deviate (be in error) from the parameter it is estimating.
+
+## Sampling Distributions (1/N)
+
+Because the statistics of samples obtained from the same distribution can deviate from each other due to chance how can we tell if difference in a statistic  (i.e., mean) between samples are due to chance or something else? 
+
+![](https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/Week_3/Images/sampst2.gif){width=50%}
+
+We compare observed differences to a distribution of the differences between samples – a sampling distribution – to see if the variability would be expected. 
+
+## Generating a single sampling distribution
+
+Imagine some population, *P* with a mean IQ of 100 and sd = 15. Lets take a random sample of 1000 people from that population and get a sample mean. 
+```{r echo=TRUE}
+if (!require("pacman")) install.packages("pacman")
+
+pacman::p_load(
+  downloader,
+  dplyr,
+  multicon)
+
+set.seed(1)
+
+P <- rnorm(n=25000, mean = 100, sd = 15)
+mean(P);popsd(P)
+hist(P)
+
+sample <- sample(x = P,size = 1000)
+sampleMean <- mean(sample)
+hist(sampleMean)
+```
+
+## Repeated sampling:
+
+The theoretical sampling distribution is a distribution of meams from repeated sampling. We may construct a simulation of the distribution using a `for` loop:
+
+- a true R ninja does not use for loops (I am not a true R ninja)
+- for loops repeat the same sequence of commands a set number of times
+- general form:
+
+```{r eval = FALSE, echo=TRUE}
+for (iteration in 1:number of iterations){
+  do something this iteration
+}
+```
+
+## Repeated sampling (`for` loop example)
+
+```{r echo=TRUE}
+iteration <- 0
+for (x in 1:10){
+  iteration <- iteration + 1 # take last iteration and add 1
+  x <- 2*iteration # 2 times iteration
+  show(c(iteration, x)) # combine outputs into single line
+}
+```
+
+## Repeated sampling:
+```{r echo=TRUE}
+numSamples <- 10
+
+set.seed(1)
+
+for (i in 1:10){
+  sample <- sample(x = P,size = 1000)
+  sampleMean <- mean(sample)
+  show(sampleMean)
+}
+```
+
+## Repeated sampling:
+better to save our values for each iteration:
+
+```{r echo=TRUE}
+numSamples <- 100
+sampleDist <- vector(mode = "numeric",length = numSamples)
+set.seed(1)
+
+for (i in 1:numSamples){
+  sample <- sample(x = P,size = 100)
+  sampleMean <- mean(sample)
+  sampleDist[i] <- sampleMean
+}
+
+hist(sampleDist,50)
+```
+
+* the **standard error** is equal to the SD of this distribution.
+
+## Sampling Distributions (2/N)
+
+**Sampling Distribution of Differences Between Means:** A sampling distribution that tell us what values we might (or might not) expect to obtain if the means of the populations from which the samples came from were equal.
+
+**Example:** Suppose we have two populations. A sampling distribution of differences between the means could be obtained by:
+
+- Drawing a pair of random samples of the same size N
+- calculate the difference between the sample means
+- repeat for a large (infinite) number of sample pairs
+- plot the distribution of differences in means
+
+## An Example:
+
+```{r echo=TRUE}
+set.seed(1)
+
+Pmen <- rnorm(n=250000, mean = 100, sd = 15)
+Pwomen <- rnorm(n=250000, mean = 110, sd = 15)
+
+numSamples <- 1000
+obs_diff <- vector(mode = "numeric",length = numSamples)
+set.seed(1)
+
+for (i in 1:numSamples){
+  sampleMen <- sample(x = Pmen,size = 100)
+  sampleWomen <- sample(x = Pwomen,size = 100)
+  obs_diff[i] <- mean(sampleWomen)-mean(sampleMen)
+}
+
+hist(obs_diff,50)
+```
+
+
+## Hypothesis Testing (1/N)
+
+Hypothesis testing refers to the process of choosing between competing hypotheses based on observed data and whether observed differences are likely to have occurred due to sampling error.
+
+A statistical hypothesis test is a method of making decisions using data, whether from a controlled experiment or an observational study (not controlled), about a research and null hypothesis:
+
+## Hypothesis Testing (2/N)
+
+**Research Hypothesis** is the hypothesis we want to test (i.e., samples drawn from populations with different means). For example:
+
+- Taller people on average earn more money than shorter people
+- People are faster to respond to real words compared to non-words.
+- Self-esteem of children from divorced parents is lower than for children of non-divorced parents.
+
+## Hypothesis Testing (3/N)
+
+**Null Hypothesis** is the hypothesis that there is no difference. (i.e., samples drawn from populations with the same means). For example:
+
+- Taller people on average earn the same as shorter people
+- People respond  as fast/slow to real words and non-words.
+- Self-esteem of children from divorced parents is equivalent to the self-esteem  of children of non-divorced parents.
+
+## Hypothesis Testing (4/N)
+The logic of statistical hypothesis testing:
+
+1. Begin with a research hypothesis
+2. Setup the null hypothesis: **H~0~**
+3. Construct a sample distribution of a particular statistic on the assumption that **H~0~**  is true.  
+4. Collect some data
+5. Reject or retain **H~0~**, depending on the probability, under **H~0~**, of a sample statistic as extreme as the one obtained – usually less than 5% chance that the sample statistic would be observed (i.e., p ≤ .05).
+
+## Hypothesis Testing (5/N)
+
+**NOTE: We are not:**
+
+- testing whether the research hypothesis is true given the data. 
+- testing whether the null hypothesis is true given the data
+
+**Rather…**
+- we are testing whether we expect to obtain the particular data if the null hypothesis is true.
+- in other words, we reject (not disprove) the null hypothesis if the probability of the obtained statistic (i.e., mean difference score) is so small that it is unlikely to be due to chance alone (i.e., sampling error).
+- … and thus, is potentially due to something else… hopefully what we defined in our research hypothesis.
+
+## Hypothesis Testing (6/N)
+
+- in the previous example, we compared a population of men to a population of women. **However** what is the assumption of the null hypothesis? What comparison should we make for the null distribution?
+
+## The Null distribution:
+Assumes the populations are the same. That is the control and experimental groups are from the same population (have same measures of CLT). For example, the null distribution of men's IQ scores may be derived using:
+
+```{r echo=TRUE}
+set.seed(1)
+
+PmenControl <- rnorm(n=250000, mean = 100, sd = 15)
+PmenTreatment <- rnorm(n=250000, mean = 100, sd = 15)
+
+numSamples <- 1000
+obs_diff <- vector(mode = "numeric",length = numSamples)
+set.seed(1)
+
+for (i in 1:numSamples){
+  sampleControl <- sample(x = PmenControl,size = 100)
+  sampleTreatment <- sample(x = PmenTreatment,size = 100)
+  obs_diff[i] <- mean(sampleControl)-mean(sampleTreatment)
+}
+
+hist(obs_diff,50)
+```
+
+
+## The Null distribution:
+
+That is, we took repeated samples from the same population and compared their differences. Based on this distribution, we can make claims regarding the probability of an observed differences between scores assuming they are from the same population.
+
+For example, given our null distribution how might we calculate the likelihood of finding a mean difference of greater than +3 points? What about in the actual data?
+
+```{r echo=TRUE}
+
+set.seed(1)
+
+PmenControl <- rnorm(n=250000, mean = 100, sd = 15)
+PmenTreatment <- rnorm(n=250000, mean = 100, sd = 15)
+
+numSamples <- 10000
+obs_diff <- vector(mode = "numeric",length = numSamples)
+set.seed(1)
+
+for (i in 1:numSamples){
+  sampleControl <- sample(x = PmenControl,size = 100)
+  sampleTreatment <- sample(x = PmenTreatment,size = 100)
+  obs_diff[i] <- mean(sampleControl)-mean(sampleTreatment)
+}
+
+zscore <- (3 - mean(obs_diff))/sd(obs_diff)
+
+1 - pnorm(zscore)
+
+mean(obs_diff>3)
+
+```
+
+
+## In class exercise:
+
+To make this clear let's assume we have data related to relative height and income of all male employees at UC, where anyone about 5'10 we consider tall (yea me!)
+
+```{r echo=TRUE}
+if (!require("pacman")) install.packages("pacman")
+
+pacman::p_load(
+  downloader,
+  dplyr)
+
+
+mensIncome <- read.table(file="mensIncome.txt", header = T) 
+
+
+```
+
+
+## In class exercise: Steps
+
+- load in packages
+- load in data
+- generate the null distribution
+- calculate the likelihood of an income of greater than 52,000 provided the null distribution (for both distributions)
+- calculate the likelihood of obtaining a the mean income of tall men being $1000 greater than short men.
+
+
+
+## Permutations & Combinations
+
+Given what we know we can construct functions for each of these?
+```{r echo=TRUE}
+permutations <- function(N,r){
+  factorial(N)/factorial(N-r)
+}
+```
+
+## Binomial distribution:
+
+A useful function for the binomial distribution in R is: 
+```{r eval = FALSE, echo=TRUE}
+dbinom()
+```
+where `dbinom` has three arguments: the number of correct responses, the size of all possible responses (number of trials), and the independent P of each trial. 
+
+*Q:* In the case of flipping a coin, given 20 flips what is the probability of exactly 14 heads (assuming heads=correct)?
+
+## Creating a binomial probability table:
+```{r echo=TRUE}
+probability <- 0.5
+numToss <- 20
+successP <- vector(mode = "numeric",length = numToss)
+successN <- 1:numToss
+
+for (i in successN){
+  successP[i] <- dbinom(x=i,size=numToss,prob = probability)
+}
+```
+
+## introduction to `ggplot2`
+
+```{r echo=TRUE}
+if (!require("pacman")) install.packages("pacman")
+
+pacman::p_load(
+  downloader,
+  dplyr,
+  multicon,
+  ggplot2
+  )
+
+# create a table of successN and successP:
+binomialTable <- data.frame(successN,successP)
+
+# plot using ggplot2
+ggplot(data = binomialTable, aes(x=successN,y=successP))+geom_bar(stat = "identity") 
+```
+
+## APA format... sort of:
+```{r echo=TRUE}
+# APA format, sort of...
+apa_format=theme_bw()+
+    theme(panel.grid.major=element_blank(),
+          panel.grid.minor=element_blank(),
+          panel.border=element_blank(),
+          axis.line=element_line(),
+          text=element_text(family='Arial'),
+          legend.title=element_blank()
+          )
+
+p <- ggplot(data = binomialTable, aes(x=successN,y=successP))+geom_bar(stat = "identity") 
+
+p <- p + apa_format
+p <- p + scale_y_continuous(expand = c(0, 0), limits = c(0, .25))
+p <- p + xlab("Number of successes")
+
+show(p)
+```
+
+
+
+
