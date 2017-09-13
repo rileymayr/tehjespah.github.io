@@ -36,33 +36,33 @@ UCfacultyHeights <- data.frame(Gender,Height)
 
 ## Part 1:
 
-#### 1. How many faculty members at UC self-identify as women? Characterize their distribution of heights (population mean, population sd). **Note that in order to get the population standard deviation you need to use the `popsd()` function from the `multicon` package.
+##### 1. How many faculty members at UC self-identify as women? Characterize their distribution of heights (population mean, population sd). **Note that in order to get the population standard deviation you need to use the `popsd()` function from the `multicon` package.
 
 
-#### 2. ... and men? 
+##### 2. ... and men? 
 
 
-#### Rather that having access to the entire population, you may only get access to a limited number of members of each gender. 
+##### Rather that having access to the entire population, you may only get access to a limited number of members of each gender. 
 
-#### 3a. Create a sampling distribution of means for **women** and assign it to the variable name `women10` by: setting the seed at 1, then using a for-loop to take a random sample of **10 women 1,000 times**. Report the summary stats of this distribution (mean, sd).
+##### 3a. Create a sampling distribution of means for **women** and assign it to the variable name `women10` by: setting the seed at 1, then using a for-loop to take a random sample of **10 women 1,000 times**. Report the summary stats of this distribution (mean, sd).
 
-#### 3b. Create a sampling distribution of means for **women** and assign it to the variable name `women100` by: setting the seed at 1, then using a for-loop to take a random sample of **100 women 1,000** times. Report the summary stats of this distribution (mean, sd).
+##### 3b. Create a sampling distribution of means for **women** and assign it to the variable name `women100` by: setting the seed at 1, then using a for-loop to take a random sample of **100 women 1,000** times. Report the summary stats of this distribution (mean, sd).
 
-#### 3c. Are there any differences in the summary stats of the two sampling distributions? Create a histogram of each distribution. Do you notice any differences here as well? Explain what may be causing these differences. (Hint in question 4).
+##### 3c. Are there any differences in the summary stats of the two sampling distributions? Create a histogram of each distribution. Do you notice any differences here as well? Explain what may be causing these differences. (Hint in question 4).
 
-#### 4. The SD of a sampling distribution of means is commonly referred to as _________. We typically estimate ________ from a single sample by using a central tendency measure of that sample. What is this equation. Explicitly connect this to what you observed in above.
+##### 4. The SD of a sampling distribution of means is commonly referred to as _________. We typically estimate ________ from a single sample by using a central tendency measure of that sample. What is this equation. Explicitly connect this to what you observed in above.
 
 ## Part 2:
 
-#### 5. Create a sampling distribution of means for **men** and assign it to the variable name `men50` by: setting the seed at 1, then using a for-loop to take a random sample of **50 men 100 times**. Report the summary stats of this sample (mean, sd).
+##### 5. Create a sampling distribution of means for **men** and assign it to the variable name `men50` by: setting the seed at 1, then using a for-loop to take a random sample of **50 men 100 times**. Report the summary stats of this sample (mean, sd).
 
-#### 6. What is the largest sample mean that you get? What is the smallest?
+##### 6. What is the largest sample mean that you get? What is the smallest?
 
-#### 7. For the above distribution what proportion of sample means are between 69.1 and 69.3?
+##### 7. For the above distribution what proportion of sample means are between 69.1 and 69.3?
 
-#### 8. Create a null distribution of means for men and assin it to the variable `nullM` by setting the seed at 1, and using the sampling aruments from question 4. What is the maximum difference you abserve assuming the null hypothesis?
+##### 8. Create a null distribution of means for men and assin it to the variable `nullM` by setting the seed at 1, and using the sampling aruments from question 4. What is the maximum difference you abserve assuming the null hypothesis?
 
-#### 9. Assuming the above null distribution, what is the probablity of finding an observed difference of 2 inches between your two groups?
+##### 9. Assuming the above null distribution, what is the probablity of finding an observed difference of 2 inches between your two groups?
 
 
 
