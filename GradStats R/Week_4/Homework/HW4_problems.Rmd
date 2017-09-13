@@ -50,7 +50,7 @@ UCfacultyHeights <- data.frame(Gender,Height)
 
 ##### 3c. Are there any differences in the summary stats of the two sampling distributions? Create a histogram of each distribution. Do you notice any differences here as well? Explain what may be causing these differences. (Hint in question 4).
 
-##### 4. The SD of a sampling distribution of means is commonly referred to as _________. We typically estimate ________ from a single sample by using a central tendency measure of that sample. What is this equation. Explicitly connect this to what you observed in above.
+##### 4. The SD of a sampling distribution of means is commonly referred to as _________. We typically estimate ________ from a single sample by using a central tendency measure of that sample. What is this equation? Explicitly connect this to what you observed in above.
 
 ## Part 2:
 
