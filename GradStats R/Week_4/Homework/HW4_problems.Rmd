@@ -60,9 +60,9 @@ UCfacultyHeights <- data.frame(Gender,Height)
 
 ##### 7. For the above distribution what proportion of sample means are between 69.1 and 69.3?
 
-##### 8. Create a null distribution of means for men and assin it to the variable `nullM` by setting the seed at 1, and using the sampling aruments from question 4. What is the maximum difference you abserve assuming the null hypothesis?
+##### 8. Create a null distribution of means for men and assign it to the variable `nullM` by setting the seed at 1, and using the sampling arguments from question 4. What is the maximum difference you observe assuming the null hypothesis?
 
-##### 9. Assuming the above null distribution, what is the probablity of finding an observed difference of 2 inches between your two groups?
+##### 9. Assuming the above null distribution, what is the probability of finding an observed difference of 2 inches between your two groups?
 
 
 
