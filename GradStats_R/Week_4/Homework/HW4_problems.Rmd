@@ -50,7 +50,7 @@ UCfacultyHeights <- data.frame(Gender,Height)
 
 ##### 3c. Are there any differences in the summary stats of the two sampling distributions? Create a histogram of each distribution. Do you notice any differences here as well? Explain what may be causing these differences. (Hint in question 4).
 
-##### 4. The SD of a sampling distribution of means is commonly referred to as _________. We typically estimate ________ from a single sample by using a central tendency measure of that sample. What is this equation? Explicitly connect this to what you observed in above.
+##### 4. The SD of a sampling distribution of means is commonly referred to as _________. We typically estimate ________ from a single sample by using a central tendency measure of that sample. What is this equation? Explicitly connect this to what you observed above.
 
 ## Part 2:
 
@@ -58,11 +58,11 @@ UCfacultyHeights <- data.frame(Gender,Height)
 
 ##### 6. What is the largest sample mean that you get? What is the smallest?
 
-##### 7. For the above distribution what proportion of sample means are between 69.1 and 69.3? **I will accept either the actual probability or the theoretical probability. BONUS for both**
+##### 7. For the above distribution what proportion of sample means are between 69.1 and 69.3? **I will accept either the actual probability or the theoretical probability. BONUS for both..**
 
 ##### 8. Create a null distribution of means for men and assign it to the variable `nullM` by setting the seed at 1, and using the sampling arguments from question 5. What is the maximum difference you observe assuming the null hypothesis?
 
-##### 9. Assuming the above null distribution, what is the probability of finding an observed difference of 2 inches between your two groups? **HINT: Zero is not the right answer**
+##### 9. Assuming the above null distribution, what is the probability of finding an observed difference of 2 inches between your two groups? **HINT: Zero is not the right answer.**
 
 
 
