@@ -58,11 +58,11 @@ UCfacultyHeights <- data.frame(Gender,Height)
 
 ##### 6. What is the largest sample mean that you get? What is the smallest?
 
-##### 7. For the above distribution what proportion of sample means are between 69.1 and 69.3?
+##### 7. For the above distribution what proportion of sample means are between 69.1 and 69.3? **I will accept either the actual probability or the theoretical probability. BONUS for both**
 
 ##### 8. Create a null distribution of means for men and assign it to the variable `nullM` by setting the seed at 1, and using the sampling arguments from question 5. What is the maximum difference you observe assuming the null hypothesis?
 
-##### 9. Assuming the above null distribution, what is the probability of finding an observed difference of 2 inches between your two groups?
+##### 9. Assuming the above null distribution, what is the probability of finding an observed difference of 2 inches between your two groups? **HINT: Zero is not the right answer**
 
 
 
