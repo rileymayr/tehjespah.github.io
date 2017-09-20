@@ -1,4 +1,4 @@
-"attempted"	"heroin"
+"Attempted"	"Heroin"
 "Yes"	"Active User"
 "Yes"	"Non User"
 "Yes"	"Former User"
