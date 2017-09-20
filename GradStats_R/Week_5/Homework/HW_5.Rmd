@@ -1,0 +1,45 @@
+---
+title: "HW5"
+author: "Tehran Davis"
+date: "9/20/2017"
+output: html_document
+---
+
+
+Part 1. Permutations and Combinations
+
+Create a function in R that can solve for both combinations and permutations. This function should have 3 input arguements: *N*, *r*, and whether you are performing a combination or permutation. NOTE that this calls on some of the skills that you acquired 2 weeks ago re: "building a function", "if statements" and "conditional logic". Use this function to answer the following:
+
+**Suppose we have 5 Objects: A, B, C, D, and E.**
+
+Q1). how many ways can they be arranged (permuted)?
+
+Q2). how many ways can 2 of the 5 objects be arranged (permuted)?
+
+Q3). how many ways can 3 of the 5 objects be arranged (permuted)?
+
+Q4). how many ways of choosing 2 objects from the 5 when the order doesn't matter. (what is the number of possible combinations)?
+
+Q5). How many ways of choosing 3 objects from the 5 when the order doesn't ma9er. (what is the number of possible combinations)?
+
+
+Part 2: Binomial distributions
+
+Suppose we have a box with a very large number of balls in it: 2/3 of the balls are black and the rest are red (i.e., 1/3 are red).
+
+Create (a) the binomial distribu1on for a 20 trial series, where X = Black is “success”, and (b) highlight what numbers of black balls would be “signiﬁcantly” diﬀerent from a probable expectation.
+
+Part 3: Chi-Square
+
+A recent experiment investigated the relationship between herion abuse and suicide attemps in adolescents. The data from this study may be found here:
+
+`https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/GradStats_R/Week_5/Homework/heroinSuicide.txt`
+
+
+(a) Create a table displaying this data. (b) What is the expected frequency in each cell? (c) Conduct a significance test to see if there is a relationship between herion addiction and suicide (Perform this test in BOTH R and SPSS). Put together a brief write up of your results including: the Chi-square values, and a  frquency table (in APA format, you may use Excel to constuct the table, BUT BONUS POINTS if you can construct the table in R). In your write up, be sure to include your conclusions based upon this data (see .pdf file in homework folder for example of report). 
+
+
+
+
+
+
