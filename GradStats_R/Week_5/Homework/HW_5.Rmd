@@ -31,12 +31,12 @@ Create (a) the binomial distribu1on for a 20 trial series, where X = Black is â€
 
 Part 3: Chi-Square
 
-A recent experiment investigated the relationship between herion abuse and suicide attemps in adolescents. The data from this study may be found here:
+A recent experiment investigated the relationship between heroin abuse and suicide attemps in adolescents. The data from this study may be found here:
 
 `https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/GradStats_R/Week_5/Homework/heroinSuicide.txt`
 
 
-(a) Create a table displaying this data. (b) What is the expected frequency in each cell? (c) Conduct a significance test to see if there is a relationship between herion addiction and suicide (Perform this test in BOTH R and SPSS). Put together a brief write up of your results including: the Chi-square values, and a  frquency table (in APA format, you may use Excel to constuct the table, BUT BONUS POINTS if you can construct the table in R). In your write up, be sure to include your conclusions based upon this data (see .pdf file in homework folder for example of report). 
+(a) Create a table displaying this data. (b) What is the expected frequency in each cell? (c) Conduct a significance test to see if there is a relationship between heroin addiction and suicide (Perform this test in BOTH R and SPSS). Put together a brief write up of your results including: the Chi-square values, and a  frquency table (in APA format, you may use Excel to constuct the table, BUT BONUS POINTS if you can construct the table in R). In your write up, be sure to include your conclusions based upon this data (see .pdf file in homework folder for example of report). 
 
 
 
