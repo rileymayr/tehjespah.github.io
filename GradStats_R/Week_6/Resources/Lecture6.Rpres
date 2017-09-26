@@ -339,7 +339,10 @@ pacman::p_load(psych)
 ucGRE <- read.clipboard(header = F)
 names(ucGRE) <- "ucGRE"
 
-write.table(ucGRE,file = "ucGRE.txt", row.names = F)
+## if you copy from a clipboard you should immediately WRITE the data frame to a new file!!
+
+#write.table(ucGRE,file = "ucGRE.txt", row.names = F)
+
 ```
 
 One sample t-test (Examples)
@@ -372,7 +375,7 @@ Conceptually identical to a One-Sample Test. Here we create **difference scores*
 
 Provided this data, run the test
 ```{r}
-ucGRE_prepost <- read.table("ucGRE_prepost.txt",header=T)
+ucGRE_prepost <- read.table("https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/GradStats_R/Week_6/Data/ucGRE_prepost.txt",header=T)
 ```
 
 **NOTE**: first you'll need to create a vector of difference scores.
@@ -430,7 +433,7 @@ Independent or Between Groups t-test Example
 class: small-code
 
 ```{r}
-UCvOSU <- read.table("UCvOSU.txt", header=T)
+UCvOSU <- read.table("https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/GradStats_R/Week_6/Data/UCvOSU.txt", header=T)
 
 t.test(UCvOSU$OH.State,UCvOSU$UC,paired = FALSE,var.equal = T)
 cohensD(UCvOSU$OH.State,UCvOSU$UC,method = "pooled")
@@ -448,7 +451,7 @@ pacman::p_load(tidyr,
                  )
 UCvOSU_alt <- gather(data = UCvOSU,key = "school", value = "score")
 
-write.table(UCvOSU_alt, "UCvOSU_alt.txt", row.names = F)
+write.table(UCvOSU_alt, "https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/GradStats_R/Week_6/Data/UCvOSU_alt.txt", row.names = F)
 
 t.test(score~school,data=UCvOSU_alt, paired=F, var.equal=F)
 ```
