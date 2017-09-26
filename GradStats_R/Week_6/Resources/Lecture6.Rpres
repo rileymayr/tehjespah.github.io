@@ -1,0 +1,469 @@
+<style>
+.small-code pre code {
+  font-size: .85em;
+}
+</style>
+
+
+
+Hypothesis Testing Applied to Means
+========================================================
+author: Tehran Davis
+date: 9/26/2017
+autosize: true
+font-import: http://fonts.googleapis.com/css?family=Roboto
+font-family: 'Roboto'
+
+
+
+Recap and revisit:
+========================================================
+Imagine we have this population:
+
+```{r generating a non-normal distribution, echo=FALSE,fig.width=7,fig.height=4.0,dpi=300}
+library(MASS)
+pop = rep(0,10000)
+for(i in 1:10000)
+{
+    x = mvrnorm(n = 4, rep(0,1), 1, tol = 1e-6, empirical = TRUE)
+    pop[i] = x[1]
+}
+pop <- (pop+2)*500
+
+pacman::p_load(ggplot2,cowplot, multicon, dplyr, plyr)
+# cowplot helps us put ggplots in a grid
+
+p <- qplot(pop,
+      geom="histogram",
+      main = "Population", 
+      xlab = "Response Latency",  
+      fill=I("red"), 
+      col=I("black"), 
+      alpha=I(.7)
+)
+
+mean <- mean(pop) %>% round(.,2)
+sd <-  popsd(pop) %>% round(.,2)
+
+print(paste("Mean =", mean, "SD =", sd, sep=" "))
+
+show(p)
+# from teh multicon package
+```
+
+Recap and revisit:
+========================================================
+
+- sampling error (variability due to chance)
+
+```{r echo=FALSE, fig.width=8, fig.height=4.5,dpi=300}
+sample1 <- sample(pop, size=100)
+sample2 <- sample(pop, size=100)
+sample3 <- sample(pop, size=100)
+
+pacman::p_load(ggplot2,cowplot)
+
+p1 <- qplot(sample1,
+      geom="histogram",
+      main = "Sample 1", 
+      xlab = "Response Latency",  
+      fill=I("red"), 
+      col=I("black"), 
+      alpha=I(.7)
+)
+
+p2 <- qplot(sample2,
+      geom="histogram",
+      main = "Sample 2", 
+      xlab = "Response Latency",  
+      fill=I("red"), 
+      col=I("black"), 
+      alpha=I(.7)
+)
+
+p3 <- qplot(sample3,
+      geom="histogram",
+      main = "Sample 3", 
+      xlab = "Response Latency",  
+      fill=I("red"), 
+      col=I("black"), 
+      alpha=I(.7)
+)
+
+plot_grid(p1,p2,p3,nrow = 1)
+
+```
+
+
+
+Recap and revisit:
+========================================================
+
+- the sampling distribution of means
+
+```{r echo=FALSE, fig.width=8, fig.height=3.5,dpi=300}
+sampleSize <- 10
+
+sampleDist1 <- sampleDist2 <- sampleDist3 <- vector()
+for (i in 1:500){
+  # get the sample 
+  sample1 <- sample(pop,size = 10)
+  sample2 <- sample(pop,size = 50)
+  sample3 <- sample(pop,size = 100)
+
+  # distibution of sample means:
+  sampleDist1[i] <- mean(sample1)
+  sampleDist2[i] <- mean(sample2)
+  sampleDist3[i] <- mean(sample3)
+}
+
+
+p1 <- qplot(sampleDist1,
+      geom="histogram",
+      main = "Sample Size = 10", 
+      xlab = "Mean Response Latency",  
+      fill=I("red"), 
+      col=I("black"), 
+      alpha=I(.7)
+)  
+
+p2 <- qplot(sampleDist2,
+      geom="histogram",
+      main = "Sample Size = 50", 
+      xlab = "Mean Response Latency",  
+      fill=I("red"), 
+      col=I("black"), 
+      alpha=I(.7)
+)
+
+p3 <- qplot(sampleDist3,
+      geom="histogram",
+      main = "Sample Size = 100", 
+      xlab = "Mean Response Latency",  
+      fill=I("red"), 
+      col=I("black"), 
+      alpha=I(.7)
+)
+
+plot_grid(p1,p2,p3,nrow = 1)
+
+
+```
+
+```{r echo=FALSE}
+print(paste(mean(sampleDist1), "±", sd(sampleDist1), ";",
+            mean(sampleDist2), "±", sd(sampleDist2), ";",
+            mean(sampleDist3), "±", sd(sampleDist3), ";",
+            sep = " ")
+      )
+```
+
+
+Testing Hypotheses about Means
+===
+
+The central limit theorem provides a foundation for us to test hypothesis about means. It provides us with a way of ‘estimating’ what variation we would expect based on our sample size. 
+
+That is, we can use the SD of the sampling distribution of the mean, referred to as the standard error of the mean (SEM) to determine what is statistically probable or not.
+
+$$\sigma_\overline{X} = \frac{\sigma}{\sqrt{n}}$$
+
+Testing Hypotheses about Means (Z-scores)
+===
+We can use a Z-score when $\mu$ and $\sigma$ are known.
+
+$$ Z = \frac{\overline{X} - \mu}{\sigma_\overline{X}} $$
+
+where:
+
+$\overline{X}$ is the **sample mean**  
+$\mu$ is the **population mean**  
+$\sigma_\overline{X}$ is the **standard error of the mean**  
+
+**THIS YOU HAVE DONE!!!**
+
+Z examples (1/2)
+===
+class: small-code
+
+suppose **$\mu$ = 75** and **$\sigma$ = 18**
+
+$H_0: \mu_\overline{X} = \mu$
+$H_1: \mu_\overline{X} ≠ \mu$
+
+
+**Sample mean = 80**
+```{r}
+z <- (80 - 75) / (18 / sqrt(25))
+p <- 1 - pnorm(z,lower.tail = T)
+show(c(z,p))
+```
+
+If alpha = .05, **DO NOT** reject $H_0$ if one-tailed test or if 2-tailed test ($\alpha$/2)
+
+Z examples (2/2)
+===
+class: small-code
+
+suppose **$\mu$ = 75** and **$\sigma$ = 18**
+
+$H_0: \mu_\overline{X} = \mu$
+$H_1: \mu_\overline{X} ≠ \mu$
+**Sample mean = 81**
+```{r}
+z <- (81 - 75) / (18 / sqrt(25))
+p <- 1 - pnorm(z,lower.tail = T)
+show(c(z,p))
+```
+
+If alpha = .05, **DO** reject $H_0$ if one-tailed test, but **DO NOT** for 2-tailed test ($\alpha$/2)
+
+Hypothesis testing using the Student’s t Distribution 
+========================================================
+z-test requires knowledge of parameters (i.e., σ)– which we don’t usually know. t-tests are statistical tests that estimate population parameters from a sample (i.e., σ  from s) and, assuming a normal distribution, test hypothesis using a t statistic (rather than a z statistic) and the student’s t distribution.
+
+Unlike the z distribution, the t distribution factors in the size of the sample distribution (i.e., n), because sampling distributions of sample variance tend to be positively skewed, especially for small sample sizes. 
+
+Hypothesis testing using the Student’s t Distribution 
+========================================================
+The t-distribution accounts for this skewness and provides more accurate estimates of probability for hypothesis testing. The *df* determine how spread-out of a [t-distribution](https://gallery.shinyapps.io/tdist/) to use.
+
+```{r echo=FALSE, fig.width=8, fig.height=3, dpi=300}
+pop <- rnorm(n = 5000,mean = 25,sd = 5)
+
+sampleDist1 <- sampleDist2 <- sampleDist3 <- vector()
+for (i in 1:500){
+  # get the sample 
+  sample1 <- sample(pop,size = 10)
+  sample2 <- sample(pop,size = 50)
+  sample3 <- sample(pop,size = 100)
+
+  # distibution of sample variances:
+  sampleDist1[i] <- var(sample1)
+  sampleDist2[i] <- var(sample2)
+  sampleDist3[i] <- var(sample3)
+}
+
+p1 <- qplot(sampleDist1,
+      geom="histogram",
+      main = "Sample Size = 10", 
+      xlab = "Sample Varience",  
+      fill=I("red"), 
+      col=I("black"), 
+      alpha=I(.7)
+)  
+
+p2 <- qplot(sampleDist2,
+      geom="histogram",
+      main = "Sample Size = 50", 
+      xlab = "Sample Varience",  
+      fill=I("red"), 
+      col=I("black"), 
+      alpha=I(.7)
+)
+
+p3 <- qplot(sampleDist3,
+      geom="histogram",
+      main = "Sample Size = 100", 
+      xlab = "Sample Varience",  
+      fill=I("red"), 
+      col=I("black"), 
+      alpha=I(.7)
+)
+
+plot_grid(p1,p2,p3,nrow = 1)
+```
+
+
+
+One sample t-test
+========================================================
+
+The **One-sample** test compares a sample to a known (set) mean.
+
+$$ t = \frac{\overline{X} - \mu}{s_\overline{X}}  \hspace{4cm}  df = n-1$$
+
+where:  
+
+$\overline{X}$ is the **sample mean**  
+$\mu$ is the **population mean**  
+$s_\overline{X}$ is the **standard error of the mean**  $\hspace{1cm} (s/\sqrt{n})$
+
+One sample t-test (Examples)
+========================================================
+
+Suppose that **μ = 0**  $\hspace{1cm}$&$\hspace{1cm}$  **σ = ?**
+
+$H_0: \mu_\overline{X} = \mu$
+$H_1: \mu_\overline{X} ≠ \mu$
+
+**Example A. Sample Mean = 1.13, SD = 2.14, n = 15**
+
+```{r}
+t <- (1.13 - 0) / (2.14/sqrt(15))
+p <- 1 - pt(q = t,df = 14)
+
+show(c(t,p))
+
+```
+
+One sample t-test (Examples)
+========================================================
+
+Suppose that **μ = 0**  $\hspace{1cm}$&$\hspace{1cm}$  **σ = ?**
+
+$H_0: \mu_\overline{X} = \mu$
+$H_1: \mu_\overline{X} ≠ \mu$
+
+**Example B. Sample Mean = 1.56, SD = 2.14, n = 15**
+
+```{r}
+t <- (1.56 - 0) / (2.14/sqrt(15))
+p <- 1 - pt(q = t,df = 14)
+
+show(c(t,p))
+
+```
+
+One sample t-test (Examples)
+========================================================
+class: small-code
+
+Assume a known distribution of GRE scores from UC:
+
+* also a new trick to bring in the data (will only work on the fly!!)
+
+bring in the data:
+```{r eval=FALSE}
+pacman::p_load(psych)
+ucGRE <- read.clipboard(header = F)
+names(ucGRE) <- "ucGRE"
+
+write.table(ucGRE,file = "ucGRE.txt", row.names = F)
+```
+
+One sample t-test (Examples)
+========================================================
+class: small-code
+
+run the test
+```{r}
+ucGRE <- read.table("ucGRE.txt",header=T)
+t.test(ucGRE,mu = 150,paired = F) # one-sample t.test
+```
+
+different variations
+```{r}
+? t.test
+```
+
+Confidence Intervals
+========================================================
+
+A **Confidence Interval** is an interval estimate of a population parameter and is used to indicate the reliability of an estimate within some degree of probability (usually 95% or 0.95). It is an observed interval (i.e. it is calculated from the observations), in principle different from sample to sample, that frequently includes the parameter of interest if the experiment is repeated. 
+$$CI_{0.95} = \overline{X} ± t_{critical}\ s_\overline{X}$$
+
+The range of values $CI_{lower}$ to $CI_{upper}$ act as good estimates of the unknown population parameter.
+
+Matched sample t-test (repeated-measures)
+========================================================
+
+Conceptually identical to a One-Sample Test. Here we create **difference scores** ($score_1$ - $score_2$)
+
+Provided this data, run the test
+```{r}
+ucGRE_prepost <- read.table("ucGRE_prepost.txt",header=T)
+```
+
+**NOTE**: first you'll need to create a vector of difference scores.
+
+Confidence Intervals and Effect Size
+========================================================
+
+**Confidence interval** based on difference score:
+$$CI_{0.95} = \overline{D} ± t_{critical}\ s_\overline{D}$$
+
+**Effect Size:**
+Statistically significant does not mean “Large” or “important”. Effects size measures provide information about the size or relative “magnitude” of a significant effect.
+
+**d-family:**  effect size measures that provide information about differences. 
+
+**Cohen’s d:** provides a measure of effect size difference scaled to the SD of one of the samples or the average SD (choice depends on the alternative/research hypothesis). 
+
+
+Calculating t and Cohen's d
+========================================================
+class: small-code
+```{r}
+t.test(ucGRE_prepost$Pre.Study, ucGRE_prepost$Post.Study, paired = T)
+```
+
+```{r}
+pacman::p_load(lsr)
+cohensD(ucGRE_prepost$Pre.Study, ucGRE_prepost$Post.Study,method = "pooled")
+```
+
+Independent samples t-test
+========================================================
+
+$$ t = \frac{\overline{X}_1 - \overline{X}_2}{s_{\overline{X}_1 - \overline{X}_2}}  \hspace{4cm}  df = n_1 + n_2 - 21 $$
+
+where:
+
+$\overline{X}$ is the **sample mean** 1 or 2
+$s_{\overline{X}_1 - \overline{X}_2}$ abides the rule that the variance of a sum or difference of two independent variables is equal to the sum of their variances.
+
+This involves taking the **pooled variences**,  a weighted average based on the size of each sample. Can account for different sample sizes if they exist (note: always better if you have equal samples sizes). 
+
+
+Assumptions of the Independent or Between Groups t-test
+===
+
+- All the samples were randomly selected
+- The measured variable is normally distributed in the population
+- The samples are independent of each other.
+- The standard deviations of the two samples are similar (homogeneity of variance)
+- The two sample means represent measurements of the same dependent variable
+
+Independent or Between Groups t-test Example
+===
+class: small-code
+
+```{r}
+UCvOSU <- read.table("UCvOSU.txt", header=T)
+
+t.test(UCvOSU$OH.State,UCvOSU$UC,paired = FALSE,var.equal = T)
+cohensD(UCvOSU$OH.State,UCvOSU$UC,method = "pooled")
+```
+
+Independent or Between Groups t-test Example
+===
+class: small-code
+
+using a data.frame format:
+
+```{r}
+pacman::p_load(tidyr,
+                 car
+                 )
+UCvOSU_alt <- gather(data = UCvOSU,key = "school", value = "score")
+
+write.table(UCvOSU_alt, "UCvOSU_alt.txt", row.names = F)
+
+t.test(score~school,data=UCvOSU_alt, paired=F, var.equal=F)
+```
+
+Testing homogeneity
+===
+class: small-code
+
+using a data.frame format:
+```{r}
+leveneTest(score~school,data=UCvOSU_alt,center="mean")
+
+```
+
+
+
+
+
