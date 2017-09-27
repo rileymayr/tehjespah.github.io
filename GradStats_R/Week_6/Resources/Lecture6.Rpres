@@ -333,9 +333,9 @@ Assume a known distribution of GRE scores from UC:
 
 * also a new trick to bring in the data (will only work on the fly!!)
 
-bring in the data:
+we can bring in data copied from an Excel file and save to a data.frame:
 ```{r eval=FALSE}
-pacman::p_load(psych)
+pacman::p_load(psych) # required package. The psych package is terribly useful!
 ucGRE <- read.clipboard(header = F)
 names(ucGRE) <- "ucGRE"
 
@@ -432,41 +432,88 @@ Independent or Between Groups t-test Example
 ===
 class: small-code
 
+Assuming we have a dataframe of UC v OSU grad student GRE scores (UCvOSU). We can compare scores between groups in two ways. 
+
 ```{r}
 UCvOSU <- read.table("https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/GradStats_R/Week_6/Data/UCvOSU.txt", header=T)
 
+head(UCvOSU)
+```
+
+Independent or Between Groups t-test Method 1
+===
+**Method 1: Enter each column of scores seperately**. This is similar to how we did the paired samples test earlier. EXCEPT note that the `paired` argument is set to `FALSE`. When calculating Cohen's d, I've elected to pool the SD's.
+
+Independent or Between Groups t-test Method 1 (code)
+===
+class: small-code
+
+```{r}
 t.test(UCvOSU$OH.State,UCvOSU$UC,paired = FALSE,var.equal = T)
 cohensD(UCvOSU$OH.State,UCvOSU$UC,method = "pooled")
+```
+
+Independent or Between Groups t-test Method 2
+===
+class: small-code
+
+**Method 2: collapsing the data.frame and using a formula format:**
+
+You can also collapse the data to a one-observation per row format using the `gather()` function from the `tidyr` package. This format is preferred in R, especially for things like ANOVA, Linear Regression, and may also be the required input for some functions in SPSS. Here, we create a new data frame `UCvOSU_alt` with the data in this format. We want to gather our scores from both columns into a single column (designated in the function by `value = `) and create a second column that identifies each score by the student's school (`key = `)
+
+Independent or Between Groups t-test Method 2 code
+===
+class: small-code
+
+```{r}
+pacman::p_load(tidyr)
+UCvOSU_alt <- gather(data = UCvOSU,key = "school", value = "score")
+
+## it may be useful to write your new, collapsed data.frame to a text file if you are sending to SPSS!!
+
+
+#write.table(UCvOSU_alt, "https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/GradStats_R/Week_6/Data/UCvOSU_alt.txt", row.names = F)
+
 ```
 
 Independent or Between Groups t-test Example
 ===
 class: small-code
 
-using a data.frame format:
+Comparing the original and new data frames:
 
 ```{r}
-pacman::p_load(tidyr,
-                 car
-                 )
-UCvOSU_alt <- gather(data = UCvOSU,key = "school", value = "score")
-
-write.table(UCvOSU_alt, "https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/GradStats_R/Week_6/Data/UCvOSU_alt.txt", row.names = F)
-
-t.test(score~school,data=UCvOSU_alt, paired=F, var.equal=F)
+head(UCvOSU); head(UCvOSU_alt)
 ```
 
-Testing homogeneity
+Independent or Between Groups t-test Example
 ===
 class: small-code
 
-using a data.frame format:
+And now running the t-test using the formual format. In this case we are looking at `score` as a function of `school`, or `score ~ school`.
+
 ```{r}
+t.test(score~school,data=UCvOSU_alt, paired=F, var.equal=T)
+```
+
+
+Testing homogeneity of variance
+===
+class: small-code
+
+In previous examples I've assumed that the variences of the two groups (OSU, UC) are equal when running my t.test. However, we should really test for this. A common method that is used is the Levene Test. This can be done in R using the `leveneTest()` function from the `car` package (another useful package, esp. for ANOVA). This is employed using the formula format as in the previous example. 
+
+Testing homogeneity of variance code
+===
+class: small-code
+```{r}
+pacman::p_load(car)
+
 leveneTest(score~school,data=UCvOSU_alt,center="mean")
 
 ```
 
-
+The output of this test is an F value and a p value with the null hypothesis that the variences are equal. That is, if p < $\alpha$ (typically .05) then we infer that the variences are unequal. If this is the case, you will need to run your `t.test` with `var.equal = FALSE`.
 
 
 
