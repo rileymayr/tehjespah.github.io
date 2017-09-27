@@ -1,0 +1,28 @@
+---
+title: "Homework 6"
+author: "Tehran Davis"
+date: "9/27/2017"
+output: html_document
+---
+
+## Perform a t-test analysis on **TWO** data sets.
+ 
+**Recall by college major:** Twenty-five students from two different college majors (Math, History) participated in a memory experiment in which they were required to recall a list of 30 words that were presented to them the previous day. 
+
+**Recall by DoP:** Twenty-five students from the general UC student body participated in a memory experiment in which they were required to recall two lists of 30 words that were presented to them the previous day.  During encoding the depth of processing (DoP) was manipulated, such that one list was encoded in a high DoP condition and the other was encoded in or low DoP condition. Participants completed both DoP conditions, with the order of DoP counterbalanced across participants.
+
+The two data sets can be found on Github. 
+
+DV = number of words recalled.
+
+HMK Assignment:
+**Using R:** Perform the appropriate t-test for each data set.
+Compute the confidence intervals and effects size (i.e. Cohen’s d) for each data set. Be careful to note whether the homogeneity of varience assumption is violate. If so be sure to note in the text AND use the appropriate degrees of freedom.
+
+Report the results of BOTH of the data sets in a narrative APA style results section report, including relevant figures.
+
+**Confirm your results using SPSS**
+
+Subnit the Rmd, SPSS output and write-up via Slack.
+
+
