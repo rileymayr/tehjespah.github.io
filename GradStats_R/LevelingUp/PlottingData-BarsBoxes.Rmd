@@ -1,0 +1,404 @@
+---
+title: "Plotting continuous data using ggplot"
+author: "Tehran Davis"
+date: "9/27/2017"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+<style type="text/css">
+
+body{ /* Normal  */
+      font-size: 18px;
+  }
+td {  /* Table  */
+  font-size: 8px;
+}
+h1.title {
+  font-size: 38px;
+  color: DarkRed;
+}
+h1 { /* Header 1 */
+  font-size: 28px;
+  color: DarkRed;
+}
+h2 { /* Header 2 */
+    font-size: 22px;
+  color: DarkBlue;
+}
+h3 { /* Header 3 */
+  font-size: 18px;
+  color: DarkBlue;
+}
+code.r{ /* Code block */
+    font-size: 12px;
+}
+pre { /* Code block - determines code spacing between lines */
+    font-size: 14px;
+}
+</style>
+
+# Plotting continous data in R using `ggplot2`
+
+While R's `base` package comes with plotting capabilities, I suggest using `ggplot2` for plotting in R. It has many built-in methods of customization, and may be combined with other packages (e.g., `ggthemer`) to yield publication quality plots. While the learning curve may be a little steep for `ggplot2`, once you've got a handle on it, you have incredible flexibility in how you want to construct your figure plot. 
+
+The examples on this page are intended to act as an entry point into `ggplot2` for plotting summary statistics for continous data. There are several types of plots that may be used to convey  data. In general psychology publications tend to focus on 4 types: **boxplots**, **scatter plots**, column or **bar plots**, and **line plots**. That said there may be many interesting ways to convey your data using `ggplot2` as the need arises. See [here](http://www.r-graph-gallery.com/portfolio/ggplot2-package/) for all the wonder ways of plotting using this library!
+
+Here I focus on barplots and boxplots for conveying differences between two samples / conditions of data.
+
+## 0. Let's begin with a dataset: 
+
+```{r}
+ucGRE_prepost <- read.table("https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/GradStats_R/Week_6/Data/ucGRE_prepost.txt",header=T)
+
+head(ucGRE_prepost)
+```
+
+This data is in wide format. That is, each line has multiple observations of data that are being compared. Here both Pre scores and Post socres are on the same line. In order to make life easier in `ggplot`, we need to get the data into long format (Pre scores and Post scores are on different lines). This can be done using the `gather()` function from the `tidyr` package. We touched briefly on this function in this weeks lecture. Here we go into a little more detail.
+
+Before starting, however, we need to do two things:
+
+First, you'll notice than in the above data frame `ucGRE_prepost` there is not a column explictly identifying each participant. We implicitly know that each line contains data from a single subject, but R does not. So we need to add a `subject` column to this dataset.
+
+First, if each subject is a row, then be need to find the number of rows in this data frame.
+
+```{r}
+nrow(ucGRE_prepost)
+```
+
+From this, we can number our subjects, assuming we are starting with subject 1:
+```{r}
+subject <- 1:nrow(ucGRE_prepost)
+```
+and attach it to our data frame:
+```{r}
+ucGRE_prepost <- data.frame(subject, ucGRE_prepost)
+head(ucGRE_prepost)
+```
+
+Note that a faster *ninja* way of doing this would be to simply run: `ucGRE_prepost$subject <- 1:nrow(ucGRE_prepost)` instead of the previous two chunks, but I digress.
+
+Second, let's make sure that `tidyr` is installed and loaded so that we may collapse our data:
+
+```{r}
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(tidyr)
+```
+
+## 1. Going from wide to long format using `gather()`
+
+It may first make sense to talk a bit about the terminology that this function uses. For every data point you have a `key` and a `value`. Think of the `key` as how the data point is defined or described, while the `value` is the measure of the data point. Tupically in research we describe the data in terms of the condition under which it was collected—so if it helps think of the `key` as your IV(s) and the `value` as your DV. For example:
+
+```{r eval=FALSE}
+
+Pre.Study: 165
+Post.Study: 169
+
+```
+where `Pre.Study` and `Post.Study` are the `key` portions and `165` and `169` are the value portions.  
+
+To use `gather()`, pass it the name of a data frame that we want to reshape. Then pass gather() a character string to use for the name of the `key` column that it will make, as well as a character string to use as the name of the `value` column that it will make. Finally, specify which columns gather() should collapse into the `key: value` pair (here with integer notation).
+
+So returning to our example, we might use the key `session` to describe our IV (`Pre.Study` and `Post.Study`) and the value `score` to describe our DV. Our original dataset `ucGRE_prepost` has score values in 3 columns, but for now we're only interested in the columns that contain raw data (not the difference scores).
+
+Using this, we create a new data frame named `ucGRE_prepost_long` in the following fashion:
+
+```{r}
+ucGRE_prepost_long <- tidyr::gather(ucGRE_prepost,key = "session", value="score",2:3)
+```
+
+here are the first six subjects Pre.Study
+```{r echo=FALSE}
+head(ucGRE_prepost_long)
+```
+and those same 6 post study (note that the very first, unnamed column are rownames)
+```{r echo=FALSE}
+ucGRE_prepost_long[21:26,]
+```
+
+You'll notice that the `subjects` column (as well as the `diff` column) were duplicated accordingly. This happens for any columns that you don't specify in the function. Since we specified 2:3, those two were collapsed on top of one another; the remaining columns are duplicated and matched appropriately.
+
+You man also notice if you were to run  `summary(ucGRE_prepost_long)` , that the `session` column does not give you a count of the number of data points in each  level as in did in some of your homework. That's because you created this column on the fly and the `summary()` function does not know what to treat it as. If you desire, you may rectify this by explicitly defining this column as a factor: 
+`ucGRE_prepost_long$session <- as.factor(ucGRE_prepost_long$session)`
+however, for this exercise this is entirely optional, as each of the functions used below automatically convert `session` to a factor (though they will give you a warning saying that they did so).
+
+We can then trim the unwanted columns if we desire. In this case we don't really need `diff`, so we can get rid of the second column (optional)
+```{r}
+ucGRE_prepost_long <- ucGRE_prepost_long[,-2]
+head(ucGRE_prepost_long)
+```
+
+Now that our data is in long format, we are ready to move to plotting.
+
+## 2 Plotting continuous data using `ggplot2`
+
+## 2.1 Getting your summary stats:
+
+You *could* go about the business of calculating means, standard errors, confidence intervals, etc. seperately, creating a table of each, and passing that data to ggplot. Or you could use a simpler way using the `summarySEwithin()` function from the `Rmisc` package. Indeed, this is an optimal method as it makes appropriate corrections for within-subjects error bars, see [Cousineau (2005)](https://doaj.org/article/dd17c4ccc4684c9da60c02f3864d09e6) and [Morey (2008)](https://doaj.org/article/011cd52c58b449c4bf169676ca704062) for a discussion on this correction.
+
+```{r}
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(Rmisc)
+```
+
+Presuming we have our data in long format, we can then construct a summary table. There are two seperate functions in the `Rmisc` package that we may use, `summarySE()` for data set that only contain only between subjects measures and `summarySEwithin()` for data sets that contain only within or mixed measure designs. This distinction is that measures of variance are calculated differently to account for within-subjects relations in the data. Since this data uses a within-subjects design, we can create a summary table:
+
+```{r}
+summaryTable <- summarySEwithin(data = ucGRE_prepost_long,measurevar = "score",betweenvars = NULL, withinvars = "session", idvar = "subject",conf.interval = 0.95)
+show(summaryTable)
+```
+The table above give us the condition, the number of subjects, the mean, sd, standard error, and 95% CI. **PLEASE NOTE:  THESE VALUES ARE NORMALIZED AND FOR GRAPHING PURPOSES ONLY. DO NOT USE THESE VALUES T0 REPORT THE SUMMARY STATS IN YOUR TEXT!!**. For an easily digestable explanation, see also Sebastiaan Mathôt's blog post [here](http://www.cogsci.nl/blog/tutorials/156-an-easy-way-to-create-graphs-with-within-subject-error-bars).
+
+The class of this table is a data.frame, so individual columns can be access using the `$` operator like so:
+
+```{r}
+summaryTable$sd
+```
+
+## 2.2 Bar Plotting
+
+Before writing out your code, its best to plan out how you want to construct the plot. 
+- What kind of plot do you want? Scatter, bar, line, heatmap?
+- What are the aesthetics of the plot? For example, if a bar plot, what goes on the y-axis? The x-axis? How many series do you have? Do you bars need different coloring? What about error bars?
+- What's you audience? Are you submitting this for publication, posting it to the web, or just personal use? This will dictate formatting.
+
+In this case we:
+- want a bar plot
+- want the different sessions (Pre v Post) on the x-axis
+- want mean scores on the y-axis
+- have a single series (only 1 IV) 
+
+Let's create a plot named `p` in ggplot using the `summaryTable` that we created above:
+```{r}
+pacman::p_load(ggplot2)
+```
+
+First, we input the data and aesthetics:
+```{r}
+p <- ggplot(data = summaryTable, aes(x = session, y = score))
+show(p) # only showing for steps
+```
+
+OK. So far we've set the canvas and loaded in the data, but the data has not been plotted. That's because R is waiting for us to tell it what kind of plot we want. Since we want a barplot conveying continous data we use: `geom_col()` (if we were doing counts we would use `geom_bar()`).
+
+```{r}
+p <- p + geom_col()
+show(p)
+```
+
+So, we've got our means data on the canvas. It may now suit us to spuce this up a bit. For example, let's add some error bars. To do this we first need to define the type and range of our error bars. To do this we can again call on our `summaryTable`:
+```{r echo = FALSE}
+show(summaryTable)
+```
+
+We typically convey our mean values in terms of the (mean) ± (measure of spread). Typically this takes the form mean ± sd or mean ± se, although in some instances we may use confidence intervals (ci). Here we want to use `se`. Using data from the summaryTable, we can explicitly state the upper and lower limits of or error bars be condition (Pre v. Post) in the following fashion:
+```{r}
+upper.error <- summaryTable$score + summaryTable$se
+lower.error <- summaryTable$score - summaryTable$se
+
+show(upper.error)
+show(lower.error)
+```
+
+We can then add these values to our plot `p` using `geom_errorbar()`:
+```{r}
+p <- p + geom_errorbar(aes(ymin=lower.error, ymax=upper.error), size=.75, width=.15, linetype=1)
+```
+To upack this, I am setting the range of the error bars on the y-axis (`ymin` and `ymax`), using `size` to define how thick I want the error bar, using `width` to define how wide I want the error bar caps to be, and using `linetype` to define the stroke (1 = solid line, 2 = dashed, 3 = dotted, etc.). This gives me:
+```{r}
+show(p)
+```
+
+Well, sort of there. It's quite apparent that I need to do something about my y-scale in order for this figure to have any use. I can do this using  `coord_cartesian`:
+```{r}
+p <- p + coord_cartesian(ylim=c(150, 160)) #(zooming in between 150 and 160)
+show(p)
+```
+
+Thats better. For here you can modify man aspects of the plot including:
+- the legend
+- title, x label, y label
+- axis font and font size
+- how wide you want the bars to be?
+- what color should they be?
+- how far apart do you want them?
+- background color?
+
+See the ggplot documentation for examples on how to do this. For now, lets give our plot proper labels:
+```{r}
+p <- p + xlab("Session") + ylab("Score")
+show(p)
+```
+
+One last thing, I don't like those condition names "Pre.Study" and "Post.Study". Unfortunately, adjusting the condition names should be done before plotting. You can either change the condition names in the longform data frame, in this case `ucGRE_prepost_long` or in the descriptive stats table, `summaryTable`. I'll change this in my original data frame (although both ways are handled identically) using the `revalue()` function from `plyr`.
+
+
+```{r eval=FALSE}
+pacman::p_load(plyr)
+plyr::revalue(ucGRE_prepost_long$session, c("Pre.Study" = "Before", "Post.Study" = "After"))
+```
+
+So, if I were to rerun my data up to this point (including modifying the levels of session) it would look like (I'm also being a little more efficient on my plotting):
+
+```{r}
+# read in data:
+ucGRE_prepost <- read.table("https://raw.githubusercontent.com/tehjespah/tehjespah.github.io/master/GradStats_R/Week_6/Data/ucGRE_prepost.txt",header=T)
+
+# adding a subject column to the data frame:
+nrow(ucGRE_prepost)
+subject <- 1:nrow(ucGRE_prepost)
+ucGRE_prepost <- data.frame(subject, ucGRE_prepost)
+
+# reshaping from wide to long format:
+ucGRE_prepost_long <- tidyr::gather(ucGRE_prepost,key = "session", value="score",2:3)
+
+# renaming the levels of "session"
+ucGRE_prepost_long$session <- plyr::revalue(ucGRE_prepost_long$session, c("Pre.Study" = "Before", "Post.Study" = "After"))
+
+# making a descriptive stat table (means, sd, se, ci)
+summaryTable <- summarySEwithin(data = ucGRE_prepost_long,measurevar = "score",betweenvars = NULL, withinvars = "session", idvar = "subject",conf.interval = 0.95)
+show(summaryTable)
+
+# setting the limits of my error bars:
+upper.error <- summaryTable$score + summaryTable$se
+lower.error <- summaryTable$score - summaryTable$se
+
+# ggplotting:
+p <- ggplot(data = summaryTable, aes(x = session, y = score)) +
+      geom_col() +
+      geom_errorbar(aes(ymin=lower.error, ymax=upper.error), size=.75, width=.15, linetype=1) +
+      coord_cartesian(ylim=c(150, 160)) +
+      xlab("Session") + ylab("Score")
+
+# show the plot
+show(p)
+```
+
+## 2.3 Theming the plot appearance
+There are also theming shortcuts. For example, I'm a big fan of the ggthemr package. For now, it is only hosted on Github. So to get it you'll need to install the `devtools` package. After `devtools` is installed you can install `ggthemr`:
+```{r}
+devtools::install_github('cttobin/ggthemr')
+```
+For presentations and html write-ups, I often use the `flat` or `flat dark` themes:
+```{r}
+ggthemr::ggthemr("flat")
+show(p)
+```
+
+Be sure to check out the author's README files at https://github.com/cttobin/ggthemr. There are additional arguements in `ggthemr()` that allow you to tweak the plot. 
+```{r}
+ggthemr::ggthemr("flat",layout = "clean",text_size = 20)
+show(p)
+```
+
+
+You can even create your own (https://github.com/cttobin/ggthemr#custom-palettes). Here's a quick attempt to try and APA-ify this joint!
+
+```{r}
+apa <- ggthemr::define_palette(
+  swatch = c("black","grey40","grey55","grey70","grey85"),
+  text = c("black","black"),
+  line = c("black","black"),
+  background = "white",
+  gradient = c("grey20","grey90")
+)
+```
+
+and testing it:
+```{r}
+ggthemr::ggthemr(apa,layout = "clean", text_size = 18)
+show(p)
+```
+
+Note that once you set a theme, it remains active until you deactivate it (see `ggthemer` documentation)
+
+## 2.4 To error bar or not to error bar
+
+Recently there has been increased push back against the practice of presenting data with standard error bars. Indeed, one benefit of using standard error bars is that they visually convey (err... exagerrate?) differences between compared data in a simple and relatively tidy manner. However, recent pushes for openness and transparency in data call for reducing this practice.
+
+One alternative, is to present all data points of the group/condition instead of simply the mean ± error bars. This may be accomplished with a few modifications of our previous code. To start, I've commented out (removed) the line producing our error bars.
+
+```{r}
+p <- ggplot(data = summaryTable, aes(x = session, y = score)) +
+      geom_col() +
+      #geom_errorbar(aes(ymin=lower.error, ymax=upper.error), size=.75, width=.15, linetype=1) +
+      coord_cartesian(ylim=c(150, 160)) +
+      xlab("Session") + ylab("Score")
+
+# show the plot
+show(p)
+```
+
+Next, I need to plot all of the data points for each contition. To do this I need to look back to my original (non-summary) data set `ucGRE_prepost_long`. To create plots of points I use the call `geom_point` like so:
+
+```{r}
+p <- p + geom_point(data=ucGRE_prepost_long, stat="identity", color="black", size=2)
+show(p)
+```
+
+One thing that becomes apparent is that I need to rescale my y-axis. Lets just rewrite all of the code:
+```{r}
+p <- ggplot(data = summaryTable, aes(x = session, y = score)) +
+      geom_col() +
+      # inserting points:
+      geom_point(data=ucGRE_prepost_long, stat="identity", color="black", size=2) +
+      # changing y-axis
+      coord_cartesian(ylim=c(120, 180)) +
+      xlab("Session") + ylab("Score")
+
+show(p)
+```
+
+Now I have barplots conveying the mean values with point plots convey each individual value per condition.
+
+
+
+
+## 3. Hmmm... but what if we wanted a boxplot?
+Perhaps a more simple and elegant way of solving the transparency issue is to use a **boxplot**. Creating a boxplot is simple enough. First, no need to create a summary table, be can just use the original raw data `ucGRE_prepost_long`. Similar to what we've already done, for a boxplot we:
+
+```{r}
+p <- ggplot(data = ucGRE_prepost_long, aes(x = session, y = score)) +
+      geom_boxplot() 
+show(p)
+```
+
+And thats it! Here we have plots of the median, IQR, and 95% CI of each condition. If I wanted to change the aesthetic a bit, for example make the contents of the box white instead of grey:
+
+```{r}
+p <- ggplot(data = ucGRE_prepost_long, aes(x = session, y = score)) +
+      geom_boxplot(fill="white") +
+      coord_cartesian(ylim=c(120, 180)) +
+      xlab("Session") + ylab("Score")
+show(p)
+```
+
+And if for some reason I wanted to overlay the indivual points on top of the boxplot:
+
+```{r}
+p <- ggplot(data = ucGRE_prepost_long, aes(x = session, y = score)) +
+      geom_boxplot(fill="white") +
+  # inserting points:
+      geom_point(data=ucGRE_prepost_long, stat="identity", color="black", size=2, pch=21) +
+      coord_cartesian(ylim=c(120, 180)) +
+      xlab("Session") + ylab("Score")
+show(p)
+```
+
+Finally, before we close here I want to point out that both `geom_col()` and `geom_boxplot()` contain many more options than I've listed here. For example you can create a notched boxplot:
+
+```{r}
+p <- ggplot(data = ucGRE_prepost_long, aes(x = session, y = score)) +
+      geom_boxplot(fill="white",notch = T, notchwidth = .2) +
+      coord_cartesian(ylim=c(120, 180)) +
+      xlab("Session") + ylab("Score")
+show(p)
+```
+
+Note that this data isn't nessarily the best example for a notch plot, but I just wanted to convey a point. For a nice cheatsheet for `ggplot2` see [this webpage](http://r-statistics.co/ggplot2-cheatsheet.html) or [this pdf](https://www.rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf). Up next, more advanced plotting including line plots and plots with higher order designs.
+
+
+
+
+
