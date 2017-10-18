@@ -91,3 +91,8 @@ hr {
     height: 2px;
     background-image: linear-gradient(to right, rgba(98, 142, 164, 0.25), rgba(98, 142, 164, 1.0), rgba(98, 142, 164, 0.25));
 }
+
+blockquote {
+  font-family: serif;
+  font-size: 12;
+}
