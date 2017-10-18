@@ -163,7 +163,7 @@ $(document).ready(function () {
 </ul></li>
 <li><a href="#fitting-the-data-to-a-model">Fitting the data to a model</a><ul>
 <li><a href="#linear-models-in-r">Linear models in R</a></li>
-<li><a href="#attibutes-of-class-lm">Attibutes of class <code>lm</code>:</a></li>
+<li><a href="#attributes-of-class-lm">Attributes of class <code>lm</code>:</a></li>
 <li><a href="#testing-the-residuals">Testing the residuals:</a></li>
 <li><a href="#using-your-lm-object-with-other-functions">Using your <code>lm</code> object with other functions</a></li>
 <li><a href="#plotting-the-regression-line">Plotting the regression line</a></li>
@@ -406,8 +406,8 @@ rXYadj &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="d
 ##       4.300537        0.008565</code></pre>
 <p>While this output only gives us our coefficients (intercept and slope of our line), our object <code>example.model</code> has the class <code>lm</code>. This simply means that R understands that this object is a stored linear model. Hiding behind this spartan output is a multitude of info that may be accessed via its attributes or they may be thrown into other functions for addition info and analysis.</p>
 </div>
-<div id="attibutes-of-class-lm" class="section level2">
-<h2>Attibutes of class <code>lm</code>:</h2>
+<div id="attributes-of-class-lm" class="section level2">
+<h2>Attributes of class <code>lm</code>:</h2>
 <p>As I mentioned above, <code>lm</code> objects contain various attributes that may be accessed using the names convention, <code>$nameOfAttribute</code>.</p>
 <p>For example, returning to the <code>example.model</code> object we created above, we may get a glimpse of its attributes by:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attributes</span>(example.model)</code></pre></div>
