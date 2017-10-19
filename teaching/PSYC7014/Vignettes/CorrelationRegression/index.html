@@ -160,6 +160,7 @@ $(document).ready(function () {
 <li><a href="#covariance-and-correlation">Covariance and Correlation</a><ul>
 <li><a href="#covariance">Covariance</a></li>
 <li><a href="#correlation">Correlation</a></li>
+<li><a href="#sigfnificance-testing-r">Sigfnificance testing <em>r</em></a></li>
 </ul></li>
 <li><a href="#fitting-the-data-to-a-model">Fitting the data to a model</a><ul>
 <li><a href="#linear-models-in-r">Linear models in R</a></li>
@@ -374,9 +375,9 @@ covXY <span class="op">/</span><span class="st"> </span>(sdX<span class="op">*</
 ## sample estimates:
 ##       cor 
 ## 0.5286565</code></pre>
-<p>As a final note before moving to regression, when our sample size is small we may need to adjust <em>r</em>. This is because the sampling distribution of <em>r</em> is not normally distributed.</p>
+<p>Note that when our sample size is small we may need to adjust <em>r</em>. This is because the sampling distribution of <em>r</em> is not normally distributed.</p>
 <p>The formula for this adjustment is:     <span class="math inline">\(r_{adj}=\sqrt{1-\frac{\sum \left (1-r^2 \right )\left ( n-1 \right )}{n-2}}\)</span></p>
-<p>For now, we can calculate this by hand, but later we will see that it will be provided by another function (or at least its squared value will)</p>
+<p>For now, we can calculate this by hand, but later we will see that it will be provided by another function (or at least its squared value will).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Pearson's r:</span>
 rXY &lt;-<span class="st"> </span><span class="kw">cor.test</span>(<span class="op">~</span>Stress<span class="op">+</span>lnSymptoms,<span class="dt">data =</span> example)<span class="op">$</span>estimate
 
@@ -384,7 +385,17 @@ rXY &lt;-<span class="st"> </span><span class="kw">cor.test</span>(<span class="
 rXYadj &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">1</span><span class="op">-</span>((<span class="dv">1</span><span class="op">-</span>rXY<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>(N<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span>(N<span class="op">-</span><span class="dv">2</span>))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>()</code></pre></div>
 <pre><code>##      cor 
 ## 0.522126</code></pre>
-<p><br><br><br></p>
+</div>
+<div id="sigfnificance-testing-r" class="section level2">
+<h2>Sigfnificance testing <em>r</em></h2>
+<p>Finaaly it may be useful to perform tests of significance on <span class="math inline">\(r\)</span>. Typically, there are two types of tests that we perform, (1) a test of the observed <span class="math inline">\(r\)</span> to 0, and (2) a test of the difference between two <span class="math inline">\(r\)</span> values. Regarding the first case, the test that the observed correlation is different from 0, Howell correctly notes the following (Section 9.11): - “a test on b is equivalent to a test on r in the one-predictor case we are discussing in this chapter. If it is true that <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are related, then it must also be true that <span class="math inline">\(Y\)</span> varies with <span class="math inline">\(X\)</span>—that is, that the slope is nonzero. This suggests that a test on <span class="math inline">\(b\)</span> (beta coefficient) will produce the same answer as a test on <span class="math inline">\(r\)</span>, and we could dispense with a test for <span class="math inline">\(b\)</span> altogether.”</p>
+<p>The reverse is also true. In the single predictor case, if one has a test of <span class="math inline">\(b\)</span> this obviates the need to run an independent test of <span class="math inline">\(r\)</span>. As you will see below, we indeed do have a simple test that gives us the significance of the beta coefficient <span class="math inline">\(b\)</span>.</p>
+<p>In the second case, the difference between <span class="math inline">\(r\)</span> values, we may invoke the <code>paired.r()</code> function from the <code>psych</code> package. Using the <span class="math inline">\(r\)</span> values from the example in Section 9.11 of the Howell text, “Testing the Difference Between Two Independent <span class="math inline">\(r\)</span>s”:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psych<span class="op">::</span><span class="kw">paired.r</span>(<span class="dt">xy =</span> .<span class="dv">50</span>, <span class="dt">xz =</span> .<span class="dv">40</span>,<span class="dt">n =</span> <span class="dv">53</span>,<span class="dt">n2 =</span> <span class="dv">53</span>,<span class="dt">twotailed =</span> T)</code></pre></div>
+<pre><code>## Call: psych::paired.r(xy = 0.5, xz = 0.4, n = 53, n2 = 53, twotailed = T)
+## [1] &quot;test of difference between two independent correlations&quot;
+## z = 0.63  With probability =  0.53</code></pre>
+<p>This output tells us the resulting Fisher-z score and corresponding probability. <br><br></p>
 </div>
 </div>
 <div id="fitting-the-data-to-a-model" class="section level1">
