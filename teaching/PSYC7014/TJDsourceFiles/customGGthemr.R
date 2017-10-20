@@ -3,8 +3,7 @@ apa <- ggthemr::define_palette(
   text = c("black","black"),
   line = c("black","black"),
   background = "white",
-  gradient = c("grey20","grey90"),
-  spacing = 1;
+  gradient = c("grey20","grey90")
 )
 
 webUC <- ggthemr::define_palette(
@@ -12,6 +11,5 @@ webUC <- ggthemr::define_palette(
   text = c("black","black"),
   line = c("black","black"),
   background = "white",
-  gradient = c("grey20","grey90"),
-  spacing = 1;
+  gradient = c("grey20","grey90")
 )
