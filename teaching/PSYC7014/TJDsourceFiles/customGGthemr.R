@@ -1,5 +1,5 @@
 apa <- ggthemr::define_palette(
-  swatch = c("black","grey40","grey55","grey70","grey85"),
+  swatch = c("black", "grey20","grey35","grey50","grey65","grey80", "grey95"),
   text = c("black","black"),
   line = c("black","black"),
   background = "white",
@@ -7,7 +7,7 @@ apa <- ggthemr::define_palette(
 )
 
 webUC <- ggthemr::define_palette(
-  swatch = c("black","red","grey55","grey70","grey85"),
+  swatch = c("black","red","grey20","grey35","grey50","grey65","grey80", "grey95"),
   text = c("black","black"),
   line = c("black","black"),
   background = "white",
