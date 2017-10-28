@@ -812,9 +812,7 @@ p &lt;-<span class="st"> </span>p <span class="op">+</span><span class="st"> </s
 ## Multiple R-squared:  0.4468, Adjusted R-squared:  0.3976 
 ## F-statistic: 9.085 on 4 and 45 DF,  p-value: 1.815e-05</code></pre>
 <p>Taking a look at this output, we see that the <code>lm() model</code> also gives us a lot of other additional useful info. For example the <span class="math inline">\(R^2\)</span> of the model may be understood as the effect size of the ANOVA. However, when we report it for ANOVA we express it as <em>partial eta-squared</em>, or <span class="math inline">\(\eta_p^2\)</span>.</p>
-<p>If we take a look at the coefficients:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lm.summary &lt;-<span class="st"> </span><span class="kw">summary</span>(<span class="kw">lm</span>(RECALL<span class="op">~</span>GROUP, <span class="dt">data=</span>dataset_names))
-lm.summary<span class="op">$</span>coefficients</code></pre></div>
+<p>Zooming in on the coefficients:</p>
 <pre><code>##                  Estimate Std. Error     t value     Pr(&gt;|t|)
 ## (Intercept)           7.0  0.9835311  7.11721300 6.830993e-09
 ## GROUPRhyming         -0.1  1.3909230 -0.07189471 9.430043e-01
