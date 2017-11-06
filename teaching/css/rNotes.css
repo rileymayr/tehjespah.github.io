@@ -7,27 +7,28 @@ body {
 
 h1 {
     font-family: 'Lato' Arial, Helvetica, sans-serif;
+    margin-top: 45px;
     font-weight: 600;
-    font-size: 28px;
+    font-size: 35px;
 }
 
 h2 {
     font-family: 'Lato', Arial, Helvetica, sans-serif;
-    margin-top: 20px;
+    margin-top: 45px;
     font-style: normal;
-    font-size: 22px;
+    font-size: 28px;
 }
 
 h3 {
     font-family: 'Lato', Arial, Helvetica, sans-serif;
-    margin-top: 20px;
+    margin-top: 45px;
     font-style: normal;
-    font-size: 18px;
+    font-size: 20px;
 }
 
 h4 {
     font-family: 'Lato', Arial, Helvetica, sans-serif;
-    margin-top: 20px;
+    margin-top: 45px;
     font-style: normal;
     font-size: 16px;
 }
