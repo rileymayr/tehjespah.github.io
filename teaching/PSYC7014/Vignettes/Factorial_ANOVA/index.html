@@ -188,6 +188,8 @@ $(document).ready(function () {
 </ul>
 </div>
 
+<p>Note that this week’s vignette assumes you have the following packages:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pacman<span class="op">::</span><span class="kw">p_load</span>(agricolae,afex,cowplot,ggplot2,dplyr,plyr,psych)</code></pre></div>
 <p>In this weeks vignette we are simply building upon the previous two weeks coverage of <a href="https://tehjespah.github.io/teaching/PSYC7014/Vignettes/ANOVA/">One-way ANOVA</a> and <a href="https://tehjespah.github.io/teaching/PSYC7014/Vignettes/MultComparisons/">multiple comparisons</a>. I’m assuming you’ve taken a look at all of the assigned material related to these topics. This week we up the ante by introducing more complex ANOVA models, aka factorial design. As we have discussed, a factorial ANOVA design is required (well, for the purposes of this course) when your experimental design has more than one IV. Our examples for this week focus on situations involving two IVs, however, what is said here applies for more complex designs involving 3, 4, 5, or however many IV’s you want to consider. Well, maybe not however many… as we well see this week and the next, the more IVs you include in your analysis, the more difficult interpreting your results becomes. This is especially true if you have interaction effects running all over the place. But perhaps I’m getting a little bit ahead of myself. Let’s just way I wouldn’t recommend including more than 3 or 4 IVs in your ANOVA at a single time and for now leave it at that.</p>
 <p>Relevant readings for the week include Howell Ch. 13 (theory) and Field Ch. 12 (theory and practical analysis in <code>R</code>).</p>
 <div id="main-effects-main-effects-and-interactions-oh-my" class="section level1">
@@ -198,8 +200,7 @@ $(document).ready(function () {
 <div id="example-22" class="section level2">
 <h2>Example 2×2</h2>
 <p>Let’s grab the data from Howell’s website. Note that for now we are going to ignore the covar column:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pacman<span class="op">::</span><span class="kw">p_load</span>(afex,cowplot,ggplot2,dplyr,plyr,psych)
-dataset &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;https://www.uvm.edu/~dhowell/methods8/DataFiles/Sec13-5.dat&quot;</span>, <span class="dt">header=</span>T)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dataset &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;https://www.uvm.edu/~dhowell/methods8/DataFiles/Sec13-5.dat&quot;</span>, <span class="dt">header=</span>T)
 
 dataset<span class="op">$</span>Smkgrp &lt;-<span class="st"> </span><span class="kw">mapvalues</span>(dataset<span class="op">$</span>Smkgrp, <span class="dt">from =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), <span class="dt">to =</span> <span class="kw">c</span>(<span class="st">&quot;Nonsmoking&quot;</span>,<span class="st">&quot;Delayed&quot;</span>,<span class="st">&quot;Active&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.factor</span>()
 
@@ -635,7 +636,7 @@ line_p &lt;-<span class="st"> </span>line_p <span class="op">+</span><span class
 <p>We need to test for differences in both the <code>Lecture</code> and <code>Presentation</code> main effects.</p>
 <ul>
 <li>Presentation: This one is easy. We only have two levels of <code>Presentation</code>, so the omnibus <code>Ftest</code> tells us that our two groups are different. Nothing else to do here other than note which mean (Computer v. Standard) is greater than the other.</li>
-<li>Lecture: We have three levels of lecture, so were are going to need to run a post-hoc analysis. In this case, a simple Bonferroni post-hoc will do (although you could choose Tukey HSD or REGWQ methods as well)</li>
+<li>Lecture: We have three levels of lecture, so were are going to need to run a post-hoc analysis. In this case, we may call upon our old standbys, Bonferroni, Tukey, and REGWQ. For example, a <code>pairwise.t.test</code> with a “bonferroni” adjustment reveals:</li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pairwise.t.test</span>(dataset_no_inter<span class="op">$</span>Score,dataset_no_inter<span class="op">$</span>Lecture,<span class="dt">p.adjust.method =</span> <span class="st">&quot;bonferroni&quot;</span>)</code></pre></div>
 <pre><code>## 
@@ -649,7 +650,44 @@ line_p &lt;-<span class="st"> </span>line_p <span class="op">+</span><span class
 ## 
 ## P value adjustment method: bonferroni</code></pre>
 <p>You may now be confused that the post hoc for <code>Lecture</code> revealed no differences even though we had an overall main effect. Don’t worry, these two do not contradict one another. The main effect is examining the overall trend in the data (think of the slope of the regression line) while the post-hoc pairwise comparisons are examining differences in means. In some cases the two are in agreement with one another. In others they don’t match up. In this case you may simply say that “while the main effect for Lecture type indicated an overall trend that performance was different by lecture, pairwise comparisons revealed no significant differences between individual lecture types.”</p>
-<p>That said… one wonders what would happen if we had planned to compare <code>Phys</code> versus the combined mean of <code>Soc</code> + <code>Hist</code>? More on that next week.</p>
+<p>That said… remember that the Bonferroni adjustment is the most conservative of the three. Let’s see what happends if we run a Tukey HSD. To run a Tukey remember that you need the ANOVA model to be saved to an object. One thing to consider is that when we ran the <code>afex::aov_ez()</code> model we returned it as an <code>afex_aov</code> object</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">afex<span class="op">::</span><span class="kw">aov_ez</span>(<span class="dt">id =</span> <span class="st">&quot;PartID&quot;</span>,<span class="dt">dv =</span> <span class="st">&quot;Score&quot;</span>,<span class="dt">data =</span> dataset_no_inter,<span class="dt">between =</span> <span class="kw">c</span>(<span class="st">&quot;Lecture&quot;</span>,<span class="st">&quot;Presentation&quot;</span>),<span class="dt">type =</span> <span class="dv">3</span>, <span class="dt">return =</span> <span class="st">&quot;afex_aov&quot;</span>,<span class="dt">anova_table =</span> <span class="kw">list</span>(<span class="dt">es =</span> <span class="st">&quot;pes&quot;</span>, <span class="dt">sig_symbols =</span> <span class="kw">rep</span>(<span class="st">&quot;&quot;</span>, <span class="dv">4</span>)))</code></pre></div>
+<pre><code>## Anova Table (Type 3 tests)
+## 
+## Response: Score
+##                 Effect    df   MSE     F pes p.value
+## 1              Lecture 2, 30 49.09  4.95 .25     .01
+## 2         Presentation 1, 30 49.09 31.25 .51  &lt;.0001
+## 3 Lecture:Presentation 2, 30 49.09  0.32 .02     .73</code></pre>
+<p>However, the <code>agricolae</code> package prefers the ANOVA models to be in the form of an <code>lm()</code> or <code>aov</code> object. This can be done in <code>afex</code> by simply changing <code>return=&quot;afex_aov&quot;</code> to <code>return=&quot;aov&quot;</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">aov.model &lt;-<span class="st"> </span>afex<span class="op">::</span><span class="kw">aov_ez</span>(<span class="dt">id =</span> <span class="st">&quot;PartID&quot;</span>,<span class="dt">dv =</span> <span class="st">&quot;Score&quot;</span>,<span class="dt">data =</span> dataset_no_inter,<span class="dt">between =</span> <span class="kw">c</span>(<span class="st">&quot;Lecture&quot;</span>,<span class="st">&quot;Presentation&quot;</span>),<span class="dt">type =</span> <span class="dv">3</span>, <span class="dt">return =</span> <span class="st">&quot;aov&quot;</span>,<span class="dt">anova_table =</span> <span class="kw">list</span>(<span class="dt">es =</span> <span class="st">&quot;pes&quot;</span>, <span class="dt">sig_symbols =</span> <span class="kw">rep</span>(<span class="st">&quot;&quot;</span>, <span class="dv">4</span>)))
+
+<span class="co"># Tukey (Lecture main effect):</span>
+agricolae<span class="op">::</span><span class="kw">HSD.test</span>(aov.model, <span class="dt">trt=</span><span class="st">&quot;Lecture&quot;</span>,<span class="dt">group =</span> F,<span class="dt">console =</span> T)</code></pre></div>
+<pre><code>## 
+## Study: aov.model ~ &quot;Lecture&quot;
+## 
+## HSD Test for Score 
+## 
+## Mean Square Error:  49.09444 
+## 
+## Lecture,  means
+## 
+##         Score       std  r Min Max
+## Hist 32.25000  7.472678 12  20  45
+## Phys 40.00000 10.795622 12  18  53
+## Soc  32.16667 10.187634 12  13  47
+## 
+## Alpha: 0.05 ; DF Error: 30 
+## Critical Value of Studentized Range: 3.48642 
+## 
+## Comparison between treatments means
+## 
+##              difference pvalue signif.         LCL        UCL
+## Hist - Phys -7.75000000 0.0289       * -14.8018857 -0.6981143
+## Hist - Soc   0.08333333 0.9995          -6.9685524  7.1352190
+## Phys - Soc   7.83333333 0.0270       *   0.7814476 14.8852190</code></pre>
+<p>It appears that our Tukey does reveal differences between means, reinforcing that it is often the preferred test.</p>
 </div>
 <div id="what-to-do-if-you-do-have-an-interaction" class="section level3">
 <h3>what to do if you DO have an interaction</h3>
