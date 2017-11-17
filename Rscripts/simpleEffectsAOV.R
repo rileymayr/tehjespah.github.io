@@ -1,8 +1,8 @@
-simpleEffectsAOV <- function(omnibus.aov,simple.aov){
-  # get important values from omnibus:
-  omnibus_mse <- omnibus.aov$anova_table$MSE[1]
-  omnibus_df <- omnibus.aov$anova_table$'den Df'[1]
-  omnibus_ss_error <- omnibus_mse * omnibus_df
+simpleEffectsAOV <- function(full.aov,simple.aov){
+  # get important values from full:
+  full_mse <- full.aov$anova_table$MSE[1]
+  full_df <- full.aov$anova_table$'den Df'[1]
+  full_ss_error <- full_mse * full_df
   
   # get important values from simple effects aov
   simple_f <- simple.aov$anova_table$F
@@ -12,17 +12,19 @@ simpleEffectsAOV <- function(omnibus.aov,simple.aov){
   simple_ss <- simple_ms * simple_df
   
   # get corrected F
-  corrected_f <- simple_ms/omnibus_mse
+  corrected_f <- simple_ms/full_mse
   
   # get corrected P
-  p.value <- (1-pf(corrected_f,df1 = simple_df,df2 = omnibus_df))
+  p.value <- (1-pf(corrected_f,df1 = simple_df,df2 = full_df))
   
   p.value <- ifelse(p.value>.001,round(p.value,3),"<.001")
   
   # get simple effects pes:
-  pes <- (simple_ss/(simple_ss+omnibus_ss_error))
+  pes <- (simple_ss/(simple_ss+full_ss_error))
   
-  output <- paste0("F(",simple_df, ",", omnibus_df,") = ", round(corrected_f,digits = 3), ", p=", p.value, ", pes=", round(pes,3))
+  output <- paste0("F(",simple_df, ",", full_df,") = ", round(corrected_f,digits = 3), ", p=", p.value, ", pes=", round(pes,3))
   
-  cbind(row.names(simple.aov[[1]]),omnibus_mse,output)
+  # round our obtained full_mse to 3 digits: 
+  full_mse <- round(full_mse,digits = 3)
+  cbind(row.names(simple.aov[[1]]),full_mse,output)
 } 
