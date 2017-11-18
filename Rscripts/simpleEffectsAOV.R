@@ -18,7 +18,7 @@ simpleEffectsAOV <- function(full.aov,simple.aov){
   p.value <- (1-pf(corrected_f,df1 = simple_df,df2 = full_df))
   
   # round p.value to 3 digits
-  p.value <- round(p,value,3)
+  p.value <- round(p.value,3)
   
   p.value <- ifelse(p.value>.001,paste0("p = ", p.value), "p < .001")
   
