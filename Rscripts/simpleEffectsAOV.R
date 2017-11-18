@@ -1,5 +1,4 @@
 simpleEffectsAOV <- function(full.aov,simple.aov){
-  require()
   # get important values from full:
   full_mse <- full.aov$anova_table$MSE[1]
   full_df <- full.aov$anova_table$'den Df'[1]
