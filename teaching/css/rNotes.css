@@ -47,10 +47,10 @@ ol > li {
     border-top:2px solid rgb(98, 142, 164);
     background:rgba(98, 142, 164, 0.1);
 }
-ol > li:before {
-    content:"exercise " counter(li); /* Use the counter as content */
-    counter-increment:li; /* Increment the counter by 1 */
-    /* Position and style the number */
+/*ol > li:before {
+    /*content:"exercise " counter(li); /* Use the counter as content */
+    /*counter-increment:li; /* Increment the counter by 1 */
+    /* Position and style the number
     position:absolute;
     top:-2px;
     left:-2em;
@@ -60,7 +60,7 @@ ol > li:before {
     width:7em;
     /* Some space between the number and the content in browsers that support
        generated content but not positioning it (Camino 2 is one example) */
-    margin-right:8px;
+  /*  margin-right:8px;
     padding:4px;
     border-top:2px solid rgb(98, 142, 164);
     color:#ffffff;
@@ -68,7 +68,7 @@ ol > li:before {
     font-weight:regular;
     font-family: 'Lato', Arial, Helvetica, sans-serif;
     text-align:center;
-}
+}*/
 li ol,
 li ul {margin-top:6px;}
 ol ol li:last-child {margin-bottom:0;}
