@@ -25,9 +25,11 @@ simpleEffectsAOV <- function(full.aov,simple.aov){
   # get simple effects pes:
   pes <- (simple_ss/(simple_ss+full_ss_error))
   
-  output <- paste0("F(",simple_df, ",", full_df,") = ", round(corrected_f,digits = 3), ", ", p.value, ", pes=", round(pes,3))
+  ftest <- paste0("F(",simple_df, ",", full_df,") = ", round(corrected_f,digits = 3), ", ", p.value, ", pes=", round(pes,3))
   
   # round our obtained full_mse to 3 digits: 
   full_mse <- round(full_mse,digits = 3)
-  cbind(row.names(simple.aov[[1]]),full_mse,output)
-} 
+  output <- cbind(row.names(simple.aov[[1]]),full_mse,ftest)
+  dimnames(output)[[2]][1] <- "Effect"
+  show(output)
+  } 
